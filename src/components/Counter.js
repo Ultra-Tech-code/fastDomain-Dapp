@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from "react"
 import {Card, Button} from "react-bootstrap";
 import {useContractKit} from "@celo-tools/use-contractkit";
-import {increaseCount, decreaseCount, getCount} from "../utils/counter";
+import {increaseCount, decreaseCount, getCount, getDomain, getConnectedAddressDomain} from "../utils/counter";
 import Loader from "./ui/Loader";
 
 const Counter = ({counterContract}) => {
@@ -60,6 +60,21 @@ const Counter = ({counterContract}) => {
             setLoading(false)
         }
     };
+
+    const fetchDomain = async () => {
+        try {
+
+            setLoading(true)
+            const value = await getConnectedAddressDomain(counterContract, performActions)
+            console.log("value ",value)
+            setCount(value)
+        } catch (e) {
+            console.log({e})
+        } finally {
+            setLoading(false)
+        }
+    };
+
     return (
 
         <Card className="text-center w-50 m-auto">
@@ -74,6 +89,11 @@ const Counter = ({counterContract}) => {
                         <Button className="m-2" variant="dark" size="lg" onClick={increment}>
                             Increase Count
                         </Button>
+
+                        <Button className="m-2" variant="dark" size="lg" onClick={fetchDomain}>
+                        Fetch Domain
+                        </Button>
+
                         <Button
                             className="m-2"
                             variant="outline-dark"
