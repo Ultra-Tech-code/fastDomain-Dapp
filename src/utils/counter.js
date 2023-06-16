@@ -1,3 +1,5 @@
+import CounterAddress from "../contracts/CounterAddress.json";
+
 export const increaseCount = async (counterContract, performActions) => {
     try {
         await performActions(async (kit) => {
@@ -43,15 +45,23 @@ export const getCount = async (counterContract) => {
 
 
 
-
-
-
-
-export const mintToken = async (tokenContract, performActions) => {
+export const approve = async (tokenContract, performActions) => {
     try {
         await performActions(async (kit) => {
             const {defaultAccount} = kit;
-            await tokenContract.methods.mintToken().send({from: defaultAccount});
+            await tokenContract.methods.approve(CounterAddress.FastDomain, 1e18).send({from: defaultAccount});
+        });
+    } catch (e) {
+        console.log({e});
+    }
+}
+
+
+export const mintToken = async (counterContract, performActions) => {
+    try {
+        await performActions(async (kit) => {
+            const {defaultAccount} = kit;
+            await counterContract.methods.mintToken().send({from: defaultAccount});
         });
     } catch (e) {
         console.log({e});

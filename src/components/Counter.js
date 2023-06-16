@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from "react"
 import {Card, Button} from "react-bootstrap";
 import {useContractKit} from "@celo-tools/use-contractkit";
-import {increaseCount, decreaseCount, getCount, getDomain, getConnectedAddressDomain, mintToken, getAllregisteredDomains} from "../utils/counter";
+import {increaseCount, decreaseCount, getCount, getDomain,registerFastDomain, getConnectedAddressDomain, mintToken, getAllregisteredDomains, approve} from "../utils/counter";
 import Loader from "./ui/Loader";
 import {NotificationSuccess} from "./ui/Notifications";
 
@@ -20,11 +20,22 @@ const Counter = ({counterContract, tokenContract}) => {
         }
     }, [counterContract, getCount]);
 
+      
+      const approveFunction = async () => {
+        try {
+            setLoading(true)
+            await approve(tokenContract, performActions);
 
+        } catch (e) {
+            console.log({e})
+        } finally {
+            setLoading(false)
+        }
+
+      }
     
     const increment = async () => {
         try {
-
             setLoading(true)
             await increaseCount(counterContract, performActions);
             await updateCount()
@@ -61,22 +72,31 @@ const Counter = ({counterContract, tokenContract}) => {
             setLoading(false)
         }
     };
+    const registerFastDomain = async (_domainname) => {
+        try {
+            setLoading(true)
+            approveFunction()
+            const value = await registerFastDomain(counterContract, performActions, _domainname)
+                console.log("value ",value)
+                setCount(value)
+        } catch (e) {
+            console.log({e})
+        } finally {
+            setLoading(false)
+        }
+    };
 
     const fetchDomain = async () => {
         try {
-
             setLoading(true)
             const value = await getConnectedAddressDomain(counterContract, performActions)
-            if (value === ''){
+            if (value === undefined){
                 console.log("You don't have a domain yet")
                 setCount("You don't have a domain yet")
             } else{
                 console.log("value ",value)
                 setCount(value)
             }
-
-
-
         } catch (e) {
             console.log({e})
         } finally {
@@ -90,7 +110,6 @@ const Counter = ({counterContract, tokenContract}) => {
             setLoading(true)
             const value = await getAllregisteredDomains(counterContract, performActions)
             console.log("value ",value)
-            console.log("Token Contract", tokenContract)
             setCount(value)
         } catch (e) {
             console.log({e})
@@ -103,7 +122,7 @@ const Counter = ({counterContract, tokenContract}) => {
     const mintFastToken = async () => {
         try {
             setLoading(true)
-            await mintToken(tokenContract, performActions)
+            await mintToken(counterContract, performActions)
             console.log("Token Minted Successfully");
             NotificationSuccess("Token Minted Successfully")
 
