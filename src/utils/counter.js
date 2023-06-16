@@ -47,11 +47,11 @@ export const getCount = async (counterContract) => {
 
 
 
-export const mintToken = async (counterContract, performActions) => {
+export const mintToken = async (tokenContract, performActions) => {
     try {
         await performActions(async (kit) => {
             const {defaultAccount} = kit;
-            await counterContract.methods.mintToken().send({from: defaultAccount});
+            await tokenContract.methods.mintToken().send({from: defaultAccount});
         });
     } catch (e) {
         console.log({e});
@@ -110,6 +110,16 @@ export const isDomainRegistered = async (counterContract) => {
     try {
 
         const value =  await counterContract.methods.isDomainRegistered().call();
+        return value
+    } catch (e) {
+        console.log({e});
+    }
+};
+
+export const getAllregisteredDomains = async (counterContract) => {
+    try {
+
+        const value =  await counterContract.methods.getAllregisteredDomains().call();
         return value
     } catch (e) {
         console.log({e});

@@ -1,5 +1,4 @@
 import { useContract } from "./useContract";
-import Counter from "../contracts/Counter.json";
 import FastDomain from "../contracts/FastDomain.json";
 import CounterAddress from "../contracts/CounterAddress.json";
 
@@ -7,5 +6,3 @@ import CounterAddress from "../contracts/CounterAddress.json";
 export const useCounterContract = () =>
   useContract(FastDomain.abi, CounterAddress.FastDomain);
 
-export const useTokenContract = () =>
-  useContract(FastDomain.abi, CounterAddress.FastDomain);

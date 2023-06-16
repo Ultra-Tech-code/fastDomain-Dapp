@@ -1,10 +1,11 @@
 import React, {useState, useEffect} from "react"
 import {Card, Button} from "react-bootstrap";
 import {useContractKit} from "@celo-tools/use-contractkit";
-import {increaseCount, decreaseCount, getCount, getDomain, getConnectedAddressDomain} from "../utils/counter";
+import {increaseCount, decreaseCount, getCount, getDomain, getConnectedAddressDomain, mintToken, getAllregisteredDomains} from "../utils/counter";
 import Loader from "./ui/Loader";
+import {NotificationSuccess} from "./ui/Notifications";
 
-const Counter = ({counterContract}) => {
+const Counter = ({counterContract, tokenContract}) => {
     const [loading, setLoading] = useState(false);
     const [count, setCount] = useState(0);
     const {performActions} = useContractKit();
@@ -19,6 +20,8 @@ const Counter = ({counterContract}) => {
         }
     }, [counterContract, getCount]);
 
+
+    
     const increment = async () => {
         try {
 
@@ -34,8 +37,6 @@ const Counter = ({counterContract}) => {
     };
 
     const decrement = async () => {
-
-
         try {
             setLoading(true)
             await decreaseCount(counterContract, performActions);
@@ -66,7 +67,30 @@ const Counter = ({counterContract}) => {
 
             setLoading(true)
             const value = await getConnectedAddressDomain(counterContract, performActions)
+            if (value === ''){
+                console.log("You don't have a domain yet")
+                setCount("You don't have a domain yet")
+            } else{
+                console.log("value ",value)
+                setCount(value)
+            }
+
+
+
+        } catch (e) {
+            console.log({e})
+        } finally {
+            setLoading(false)
+        }
+    };
+
+    const fetchAllDomain = async () => {
+        try {
+
+            setLoading(true)
+            const value = await getAllregisteredDomains(counterContract, performActions)
             console.log("value ",value)
+            console.log("Token Contract", tokenContract)
             setCount(value)
         } catch (e) {
             console.log({e})
@@ -74,6 +98,23 @@ const Counter = ({counterContract}) => {
             setLoading(false)
         }
     };
+
+
+    const mintFastToken = async () => {
+        try {
+            setLoading(true)
+            await mintToken(tokenContract, performActions)
+            console.log("Token Minted Successfully");
+            NotificationSuccess("Token Minted Successfully")
+
+        } catch (e) {
+            console.log({e})
+        } finally {
+            setLoading(false)
+        }
+    };
+
+    
 
     return (
 
@@ -93,6 +134,16 @@ const Counter = ({counterContract}) => {
                         <Button className="m-2" variant="dark" size="lg" onClick={fetchDomain}>
                         Fetch Domain
                         </Button>
+
+                        <Button className="m-2" variant="dark" size="lg" onClick={mintFastToken}>
+                        Mint Token
+                        </Button>
+
+
+                        <Button className="m-2" variant="dark" size="lg" onClick={fetchAllDomain}>
+                        Fetch all Domain
+                        </Button>
+
 
                         <Button
                             className="m-2"
