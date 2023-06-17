@@ -141,33 +141,12 @@ const Counter = ({counterContract, tokenContract}) => {
                     ?
                     <div >
                          <div>
-        <meta charSet="utf-8" />
-        <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-        <title>Siimple - Bootstrap Landing Page Template</title>
-        <meta content name="description" />
-        <meta content name="keywords" />
-        {/* Favicons */}
-        <link href="assets/img/favicon.png" rel="icon" />
-        <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon" />
-        {/* Google Fonts */}
-        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,600,600i,700,700i" rel="stylesheet" />
-        {/* Vendor CSS Files */}
-        <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
-        <link href="assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet" />
-        {/* Template Main CSS File */}
-        <link href="../src/App.css" rel="stylesheet" />
-        {/* =======================================================
-  * Template Name: Siimple
-  * Updated: May 30 2023 with Bootstrap v5.3.0
-  * Template URL: https://bootstrapmade.com/free-bootstrap-landing-page/
-  * Author: BootstrapMade.com
-  * License: https://bootstrapmade.com/license/
-  ======================================================== */}
+
         {/* ======= Header ======= */}
         <header id="header">
           <div className="container-fluid">
             <div className="logo">
-              <h1><a href="index.html">Siimple</a></h1>
+              <h1><a href="index.html">FastDomain</a></h1>
               {/* Uncomment below if you prefer to use an image logo */}
               {/* <a href="index.html"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>*/}
             </div>
@@ -202,8 +181,8 @@ const Counter = ({counterContract, tokenContract}) => {
         {/* ======= Hero Section ======= */}
         <section id="hero">
           <div className="hero-container">
-            <h1>Welcome to Siimple</h1>
-            <h2>Please, fill out the for below to be notified for the latest updates!</h2>
+            <h1>Welcome to FastDomain</h1>
+            <h2>Register your domain</h2>
             <form action="forms/notify.php" method="post" role="form" className="php-email-form">
               <div className="row no-gutters">
                 <div className="col-md-6 form-group pr-md-1">
