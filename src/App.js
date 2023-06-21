@@ -19,7 +19,7 @@ const App = function AppWrapper() {
       <Notification />
       {address ? (
         <Container fluid={true} className="p-0">
-          <Nav className="justify-content-end pt-3 pb-5">
+          <Nav className="justify-content-end pt-3 pb-5 mb-5">
             <Nav.Item>
               {/*display user wallet*/}
               <Wallet

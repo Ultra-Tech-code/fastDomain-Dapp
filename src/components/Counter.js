@@ -4,18 +4,26 @@ import {useContractKit} from "@celo-tools/use-contractkit";
 import {increaseCount, decreaseCount, getCount, getDomain,registerFastDomain, getConnectedAddressDomain, mintToken, getAllregisteredDomains, approve} from "../utils/counter";
 import Loader from "./ui/Loader";
 import {NotificationSuccess} from "./ui/Notifications";
+import { BiCalendarEdit } from "react-icons/bi";
+import "../App.css"
+let aboutImage = require("../images/img/about-img.jpg");
+let whyUs1 = require("../images/img/why-us-1.jpg"); 
+let whyUs2 = require("../images/img/why-us-2.jpg");
+let whyUs3 = require("../images/img/why-us-3.jpg");
 
 const Counter = ({counterContract, tokenContract}) => {
     const [loading, setLoading] = useState(false);
     const [count, setCount] = useState(0);
     const [message, setMessage] = useState("");
     const [domainName, setdomainName] = useState("");
+    const [allDomain, setallDomain] = useState("");
     const {performActions} = useContractKit();
 
     useEffect(() => {
         try {
             if (counterContract) {
                 updateCount()
+                fetchAllDomain()
             }
         } catch (error) {
             console.log({error});
@@ -127,6 +135,7 @@ const Counter = ({counterContract, tokenContract}) => {
             setLoading(true)
             const value = await getAllregisteredDomains(counterContract, performActions)
             console.log("value ",value)
+            setallDomain(value)
             setCount(value)
         } catch (e) {
             console.log({e})
@@ -158,49 +167,14 @@ const Counter = ({counterContract, tokenContract}) => {
                     ?
                     <div >
                          <div>
-        {/* ======= Header ======= */}
-        <header id="header">
-          <div className="container-fluid">
-            <div className="logo">
-              <h1><a href="index.html">FastDomain</a></h1>
-              {/* Uncomment below if you prefer to use an image logo */}
-              {/* <a href="index.html"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>*/}
-            </div>
-            <button type="button" className="nav-toggle"><i className="bx bx-menu" /></button>
-            <nav className="nav-menu">
-              <ul>
-                <li className="active"><a href="#header" className="scrollto">Home</a></li>
-                <li><a href="#about" className="scrollto">About Us</a></li>
-                <li><a href="#why-us" className="scrollto">Why Us</a></li>
-                <li className="drop-down"><a href>Drop Down</a>
-                  <ul>
-                    <li><a href="#">Drop Down 1</a></li>
-                    <li className="drop-down"><a href="#">Drop Down 2</a>
-                      <ul>
-                        <li><a href="#">Deep Drop Down 1</a></li>
-                        <li><a href="#">Deep Drop Down 2</a></li>
-                        <li><a href="#">Deep Drop Down 3</a></li>
-                        <li><a href="#">Deep Drop Down 4</a></li>
-                        <li><a href="#">Deep Drop Down 5</a></li>
-                      </ul>
-                    </li>
-                    <li><a href="#">Drop Down 3</a></li>
-                    <li><a href="#">Drop Down 4</a></li>
-                    <li><a href="#">Drop Down 5</a></li>
-                  </ul>
-                </li>
-                <li><a href="#contact" className="scrollto">Contact Us</a></li>
-              </ul>
-            </nav>{/* .nav-menu */}
-          </div>
-        </header>{/* End #header */}
+
         {/* ======= Hero Section ======= */}
         <section id="hero">
           <div className="hero-container">
             <h1>Welcome to FastDomain</h1>
             <h2>Register your domain</h2>
 
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit} className="email-form">
               <div className="row no-gutters">
                 <div className="col-md-6 form-group pr-md-1">
                   <input type="text" id="domainName" name="name" className="form-control" value={domainName} placeholder="Domain Name" required onChange={(event) => setdomainName(event.target.value)}/>
@@ -227,23 +201,13 @@ const Counter = ({counterContract, tokenContract}) => {
             <div className="container">
               <div className="row">
                 <div className="col-lg-6">
-                  <img src="./images/img/about-img.jpg" className="img-fluid" alt="" />
+                  <img src={aboutImage.default} className="img-fluid" alt="about image" />
                 </div>
                 <div className="col-lg-6 pt-4 pt-lg-0">
-                  <h3>Voluptatem dignissimos provident quasi corporis voluptates sit assumenda.</h3>
-                  <p className="fst-italic">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
-                    magna aliqua.
-                  </p>
-                  <ul>
-                    <li><i className="bx bx-check-double" /> Ullamco laboris nisi ut aliquip ex ea commodo consequat.</li>
-                    <li><i className="bx bx-check-double" /> Duis aute irure dolor in reprehenderit in voluptate velit.</li>
-                    <li><i className="bx bx-check-double" /> Ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate trideta storacalaperda mastiro dolore eu fugiat nulla pariatur.</li>
-                  </ul>
-                  <p>
-                    Ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate
-                    velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-                    culpa qui officia deserunt mollit anim id est laborum
+                  <h3>Most Recent Domain</h3>
+                  <p className="fst-italic display-6" >
+                    {allDomain}
+
                   </p>
                 </div>
               </div>
@@ -255,37 +219,37 @@ const Counter = ({counterContract, tokenContract}) => {
               <div className="row">
                 <div className="col-lg-4 col-md-6 d-flex align-items-stretch">
                   <div className="card">
-                    <img src="assets/img/why-us-1.jpg" className="card-img-top" alt="..." />
+                    <img src={whyUs1.default} className="card-img-top" alt="..." />
                     <div className="card-icon">
-                      <i className="bx bx-book-reader" />
+                      <i className={BiCalendarEdit} />
                     </div>
                     <div className="card-body">
                       <h5 className="card-title"><a href>Our Mission</a></h5>
-                      <p className="card-text">Lorem ipsum dolor sit amet, consectetur elit, sed do eiusmod tempor ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. </p>
+                      <p className="card-text"> Our mission is to simplify blockchain transactions by providing a user-friendly Naming Service (FastDomain) app for CELO blockchain. We aim to enhance accessibility and ease of use for users, enabling them to interact with the decentralized web seamlessly.</p>
                     </div>
                   </div>
                 </div>
                 <div className="col-lg-4 col-md-6 d-flex align-items-stretch">
                   <div className="card">
-                    <img src="assets/img/why-us-2.jpg" className="card-img-top" alt="..." />
+                    <img src={whyUs2.default} className="card-img-top" alt="..." />
                     <div className="card-icon">
                       <i className="bx bx-calendar-edit" />
                     </div>
                     <div className="card-body">
                       <h5 className="card-title"><a href>Our Plan</a></h5>
-                      <p className="card-text">Sed ut perspiciatis unde omnis iste natus error sit voluptatem doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. </p>
+                      <p className="card-text"> Our plan involves developing a robust Naming Service app that allows users to register and manage their Celo domain names effortlessly. We will prioritize creating an intuitive and secure interface that integrates seamlessly with existing Celo wallets and dApp browsers. Additionally, we will continuously enhance our app with new features and updates to ensure an exceptional user experience. </p>
                     </div>
                   </div>
                 </div>
                 <div className="col-lg-4 col-md-6 d-flex align-items-stretch">
                   <div className="card">
-                    <img src="assets/img/why-us-3.jpg" className="card-img-top" alt="..." />
+                    <img src={whyUs3.default} className="card-img-top" alt="..." />
                     <div className="card-icon">
                       <i className="bx bx-landscape" />
                     </div>
                     <div className="card-body">
                       <h5 className="card-title"><a href>Our Vision</a></h5>
-                      <p className="card-text">Nemo enim ipsam voluptatem quia voluptas sit aut odit aut fugit, sed quia magni dolores eos qui ratione voluptatem sequi nesciunt Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet. </p>
+                      <p className="card-text"> Our vision is to empower individuals and businesses by enabling them to have personalized and easily recognizable blockchain identities through our FastDomain app. We strive to foster widespread adoption of Naming Service and contribute to the growth of the decentralized web ecosystem. Ultimately, we envision a future where blockchain addresses are replaced by human-readable names, making cryptocurrency transactions more accessible and user-friendly for everyone </p>
                     </div>
                   </div>
                 </div>
@@ -323,7 +287,7 @@ const Counter = ({counterContract, tokenContract}) => {
                   </div>
                 </div>
                 <div className="col-lg-5 col-md-7">
-                  <form action="forms/contact.php" method="post" role="form" className="php-email-form">
+                  <form action="forms/contact.php" method="post" role="form" className="email-form">
                     <div className="form-group">
                       <input type="text" name="name" className="form-control" id="name" placeholder="Your Name" required />
                     </div>

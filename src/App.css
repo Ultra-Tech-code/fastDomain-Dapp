@@ -1,3 +1,4 @@
+
 .App {
   text-align: center;
 }
@@ -492,7 +493,7 @@ h6,
   font-size: 24px;
 }
 
-#hero .php-email-form .error-message {
+#hero .email-form .error-message {
   display: none;
   color: #fff;
   background: #ed3c0d;
@@ -501,7 +502,7 @@ h6,
   font-weight: 600;
 }
 
-#hero .php-email-form .sent-message {
+#hero .email-form .sent-message {
   display: none;
   color: #fff;
   background: #18d26e;
@@ -510,7 +511,7 @@ h6,
   font-weight: 600;
 }
 
-#hero .php-email-form .loading {
+#hero .email-form .loading {
   display: none;
   background: rgba(255, 255, 255, 0.5);
   text-align: center;
@@ -518,7 +519,7 @@ h6,
   border-radius: 50px;
 }
 
-#hero .php-email-form .loading:before {
+#hero .email-form .loading:before {
   content: "";
   display: inline-block;
   border-radius: 50%;
@@ -540,7 +541,7 @@ h6,
   }
 }
 
-#hero .php-email-form input {
+#hero .email-form input {
   border-radius: 50px;
   box-shadow: none;
   font-size: 14px;
@@ -551,7 +552,7 @@ h6,
   margin: 0 8px;
 }
 
-#hero .php-email-form button[type=submit] {
+#hero .email-form button[type=submit] {
   font-family: "Raleway", sans-serif;
   font-weight: 500;
   font-size: 16px;
@@ -566,7 +567,7 @@ h6,
   background: #fd680e;
 }
 
-#hero .php-email-form button[type=submit]:hover {
+#hero .email-form button[type=submit]:hover {
   background: #fd8841;
 }
 
@@ -588,7 +589,7 @@ h6,
     margin-bottom: 30px;
   }
 
-  #hero .php-email-form input {
+  #hero .email-form input {
     margin: 0 auto;
   }
 }
@@ -831,7 +832,7 @@ section {
   color: #fff;
 }
 
-.contact .php-email-form .error-message {
+.contact .email-form .error-message {
   display: none;
   color: #fff;
   background: #ed3c0d;
@@ -840,11 +841,11 @@ section {
   font-weight: 600;
 }
 
-.contact .php-email-form .error-message br+br {
+.contact .email-form .error-message br+br {
   margin-top: 25px;
 }
 
-.contact .php-email-form .sent-message {
+.contact .email-form .sent-message {
   display: none;
   color: #fff;
   background: #18d26e;
@@ -853,14 +854,14 @@ section {
   font-weight: 600;
 }
 
-.contact .php-email-form .loading {
+.contact .email-form .loading {
   display: none;
   background: #fff;
   text-align: center;
   padding: 15px;
 }
 
-.contact .php-email-form .loading:before {
+.contact .email-form .loading:before {
   content: "";
   display: inline-block;
   border-radius: 50%;
@@ -872,19 +873,19 @@ section {
   animation: animate-loading 1s linear infinite;
 }
 
-.contact .php-email-form input,
-.contact .php-email-form textarea {
+.contact .email-form input,
+.contact .email-form textarea {
   border-radius: 0;
   box-shadow: none;
   font-size: 14px;
 }
 
-.contact .php-email-form input:focus,
-.contact .php-email-form textarea:focus {
+.contact .email-form input:focus,
+.contact .email-form textarea:focus {
   border-color: #fd680e;
 }
 
-.contact .php-email-form button[type=submit] {
+.contact .email-form button[type=submit] {
   background: #fd680e;
   border: 0;
   padding: 10px 24px;
@@ -892,7 +893,7 @@ section {
   transition: 0.4s;
 }
 
-.contact .php-email-form button[type=submit]:hover {
+.contact .email-form button[type=submit]:hover {
   background: #fd8841;
 }
 
