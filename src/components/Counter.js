@@ -4,7 +4,7 @@ import {useContractKit} from "@celo-tools/use-contractkit";
 import {increaseCount, decreaseCount, getCount, getDomain,registerFastDomain, getConnectedAddressDomain, mintToken, getAllregisteredDomains, approve} from "../utils/counter";
 import Loader from "./ui/Loader";
 import {NotificationSuccess} from "./ui/Notifications";
-import { BiCalendarEdit } from "react-icons/bi";
+import { BiCalendarEdit, BiBookReader, BiLandscape} from "react-icons/bi";
 import "../App.css"
 let aboutImage = require("../images/img/about-img.jpg");
 let whyUs1 = require("../images/img/why-us-1.jpg"); 
@@ -221,7 +221,7 @@ const Counter = ({counterContract, tokenContract}) => {
                   <div className="card">
                     <img src={whyUs1.default} className="card-img-top" alt="..." />
                     <div className="card-icon">
-                      <i className={BiCalendarEdit} />
+                      <i><BiBookReader /> </i>
                     </div>
                     <div className="card-body">
                       <h5 className="card-title"><a href>Our Mission</a></h5>
@@ -233,7 +233,7 @@ const Counter = ({counterContract, tokenContract}) => {
                   <div className="card">
                     <img src={whyUs2.default} className="card-img-top" alt="..." />
                     <div className="card-icon">
-                      <i className="bx bx-calendar-edit" />
+                      <i> <BiCalendarEdit /> </i>
                     </div>
                     <div className="card-body">
                       <h5 className="card-title"><a href>Our Plan</a></h5>
@@ -245,7 +245,7 @@ const Counter = ({counterContract, tokenContract}) => {
                   <div className="card">
                     <img src={whyUs3.default} className="card-img-top" alt="..." />
                     <div className="card-icon">
-                      <i className="bx bx-landscape" />
+                      <i> <BiLandscape /> </i>
                     </div>
                     <div className="card-body">
                       <h5 className="card-title"><a href>Our Vision</a></h5>
