@@ -8,6 +8,8 @@ import {NotificationSuccess} from "./ui/Notifications";
 const Counter = ({counterContract, tokenContract}) => {
     const [loading, setLoading] = useState(false);
     const [count, setCount] = useState(0);
+    const [message, setMessage] = useState("");
+    const [domainName, setdomainName] = useState("");
     const {performActions} = useContractKit();
 
     useEffect(() => {
@@ -19,6 +21,20 @@ const Counter = ({counterContract, tokenContract}) => {
             console.log({error});
         }
     }, [counterContract, getCount]);
+
+
+    const handleSubmit = (event) => {
+        event.preventDefault();
+        setMessage(`${domainName}`);
+    
+      };
+    
+      const updateInput =() => {
+        setdomainName("");
+        // setnftId("");
+        // setReceiver("");
+        // settotalID("");
+      }
 
       
       const approveFunction = async () => {
@@ -72,13 +88,14 @@ const Counter = ({counterContract, tokenContract}) => {
             setLoading(false)
         }
     };
-    const registerFastDomain = async (_domainname) => {
+    const registerFastDomain = async () => {
         try {
             setLoading(true)
             approveFunction()
-            const value = await registerFastDomain(counterContract, performActions, _domainname)
+            const value = await registerFastDomain(counterContract, performActions, domainName)
                 console.log("value ",value)
                 setCount(value)
+                updateInput()
         } catch (e) {
             console.log({e})
         } finally {
@@ -141,7 +158,6 @@ const Counter = ({counterContract, tokenContract}) => {
                     ?
                     <div >
                          <div>
-
         {/* ======= Header ======= */}
         <header id="header">
           <div className="container-fluid">
@@ -183,23 +199,27 @@ const Counter = ({counterContract, tokenContract}) => {
           <div className="hero-container">
             <h1>Welcome to FastDomain</h1>
             <h2>Register your domain</h2>
-            <form action="forms/notify.php" method="post" role="form" className="php-email-form">
+
+            <form onSubmit={handleSubmit}>
               <div className="row no-gutters">
                 <div className="col-md-6 form-group pr-md-1">
-                  <input type="text" name="name" className="form-control" id="name" placeholder="Your Name" required />
+                  <input type="text" id="domainName" name="name" className="form-control" value={domainName} placeholder="Domain Name" required onChange={(event) => setdomainName(event.target.value)}/>
                 </div>
-                <div className="col-md-6 form-group pl-md-1">
-                  <input type="email" className="form-control" name="email" id="email" placeholder="Your Email" required />
-                </div>
+                <div></div>
+                {/* <div className="col-md-6 form-group pl-md-1 text-center">
+                 <button type="submit">Notify me!</button>
+                </div> */}
               </div>
               <div className="my-3">
                 <div className="loading">Loading</div>
                 <div className="error-message" />
                 <div className="sent-message">Your notification request was sent. Thank you!</div>
               </div>
-              <div className="text-center"><button type="submit">Notify me!</button></div>
+              <div className="text-center"><button type="submit" >Submit!</button></div>
             </form>
+
           </div>
+
         </section>{/* #hero */}
         <main id="main">
           {/* ======= About Section ======= */}
@@ -273,63 +293,6 @@ const Counter = ({counterContract, tokenContract}) => {
             </div>
           </section>{/* End Why Us Section */}
           {/* ======= Frequenty Asked Questions Section ======= */}
-          <section className="faq">
-            <div className="container">
-              <div className="section-title">
-                <h2>Frequenty Asked Questions</h2>
-              </div>
-              <ul className="faq-list">
-                <li>
-                  <a data-bs-toggle="collapse" className="collapsed" data-bs-target="#faq1">Non consectetur a erat nam at lectus urna duis? <i className="bx bx-down-arrow-alt icon-show" /><i className="bx bx-x icon-close" /></a>
-                  <div id="faq1" className="collapse" data-bs-parent=".faq-list">
-                    <p>
-                      Feugiat pretium nibh ipsum consequat. Tempus iaculis urna id volutpat lacus laoreet non curabitur gravida. Venenatis lectus magna fringilla urna porttitor rhoncus dolor purus non.
-                    </p>
-                  </div>
-                </li>
-                <li>
-                  <a data-bs-toggle="collapse" data-bs-target="#faq2" className="collapsed">Feugiat scelerisque varius morbi enim nunc faucibus a pellentesque? <i className="bx bx-down-arrow-alt icon-show" /><i className="bx bx-x icon-close" /></a>
-                  <div id="faq2" className="collapse" data-bs-parent=".faq-list">
-                    <p>
-                      Dolor sit amet consectetur adipiscing elit pellentesque habitant morbi. Id interdum velit laoreet id donec ultrices. Fringilla phasellus faucibus scelerisque eleifend donec pretium. Est pellentesque elit ullamcorper dignissim. Mauris ultrices eros in cursus turpis massa tincidunt dui.
-                    </p>
-                  </div>
-                </li>
-                <li>
-                  <a data-bs-toggle="collapse" data-bs-target="#faq3" className="collapsed">Dolor sit amet consectetur adipiscing elit pellentesque habitant morbi? <i className="bx bx-down-arrow-alt icon-show" /><i className="bx bx-x icon-close" /></a>
-                  <div id="faq3" className="collapse" data-bs-parent=".faq-list">
-                    <p>
-                      Eleifend mi in nulla posuere sollicitudin aliquam ultrices sagittis orci. Faucibus pulvinar elementum integer enim. Sem nulla pharetra diam sit amet nisl suscipit. Rutrum tellus pellentesque eu tincidunt. Lectus urna duis convallis convallis tellus. Urna molestie at elementum eu facilisis sed odio morbi quis
-                    </p>
-                  </div>
-                </li>
-                <li>
-                  <a data-bs-toggle="collapse" data-bs-target="#faq4" className="collapsed">Ac odio tempor orci dapibus. Aliquam eleifend mi in nulla? <i className="bx bx-down-arrow-alt icon-show" /><i className="bx bx-x icon-close" /></a>
-                  <div id="faq4" className="collapse" data-bs-parent=".faq-list">
-                    <p>
-                      Dolor sit amet consectetur adipiscing elit pellentesque habitant morbi. Id interdum velit laoreet id donec ultrices. Fringilla phasellus faucibus scelerisque eleifend donec pretium. Est pellentesque elit ullamcorper dignissim. Mauris ultrices eros in cursus turpis massa tincidunt dui.
-                    </p>
-                  </div>
-                </li>
-                <li>
-                  <a data-bs-toggle="collapse" data-bs-target="#faq5" className="collapsed">Tempus quam pellentesque nec nam aliquam sem et tortor consequat? <i className="bx bx-down-arrow-alt icon-show" /><i className="bx bx-x icon-close" /></a>
-                  <div id="faq5" className="collapse" data-bs-parent=".faq-list">
-                    <p>
-                      Molestie a iaculis at erat pellentesque adipiscing commodo. Dignissim suspendisse in est ante in. Nunc vel risus commodo viverra maecenas accumsan. Sit amet nisl suscipit adipiscing bibendum est. Purus gravida quis blandit turpis cursus in
-                    </p>
-                  </div>
-                </li>
-                <li>
-                  <a data-bs-toggle="collapse" data-bs-target="#faq6" className="collapsed">Tortor vitae purus faucibus ornare. Varius vel pharetra vel turpis nunc eget lorem dolor? <i className="bx bx-down-arrow-alt icon-show" /><i className="bx bx-x icon-close" /></a>
-                  <div id="faq6" className="collapse" data-bs-parent=".faq-list">
-                    <p>
-                      Laoreet sit amet cursus sit amet dictum sit amet justo. Mauris vitae ultricies leo integer malesuada nunc vel. Tincidunt eget nullam non nisi est sit amet. Turpis nunc eget lorem dolor sed. Ut venenatis tellus in metus vulputate eu scelerisque. Pellentesque diam volutpat commodo sed egestas egestas fringilla phasellus faucibus. Nibh tellus molestie nunc non blandit massa enim nec.
-                    </p>
-                  </div>
-                </li>
-              </ul>
-            </div>
-          </section>{/* End Frequenty Asked Questions Section */}
           {/* ======= Contact Us Section ======= */}
           <section id="contact" className="contact section-bg">
             <div className="container">
