@@ -1,7 +1,8 @@
 import React, {useState, useEffect} from "react"
 import {Card, Button} from "react-bootstrap";
 import {useContractKit} from "@celo-tools/use-contractkit";
-import {increaseCount, decreaseCount, getCount, getDomain,registerFastDomain, getConnectedAddressDomain, mintToken, getAllregisteredDomains, approve} from "../utils/counter";
+import {getDomain,registerFastDomain, getConnectedAddressDomain, mintToken, getAllregisteredDomains, approve} from "../utils/counter";
+import CounterAddress from "../contracts/CounterAddress.json";
 import Loader from "./ui/Loader";
 import {NotificationSuccess} from "./ui/Notifications";
 import { BiCalendarEdit, BiBookReader, BiLandscape} from "react-icons/bi";
@@ -16,24 +17,27 @@ const Counter = ({counterContract, tokenContract}) => {
     const [count, setCount] = useState(0);
     const [message, setMessage] = useState("");
     const [domainName, setdomainName] = useState("");
-    const [allDomain, setallDomain] = useState("");
+    const [allDomain, setallDomain] = useState(""); //alldomain fetch
+    const [userDomain, setUserDomain] = useState(""); //userdomain
     const {performActions} = useContractKit();
 
     useEffect(() => {
         try {
             if (counterContract) {
-                updateCount()
+                // updateCount()
+                fetchDomain()
                 fetchAllDomain()
             }
         } catch (error) {
             console.log({error});
         }
-    }, [counterContract, getCount]);
+    }, [counterContract]);
 
 
     const handleSubmit = (event) => {
         event.preventDefault();
         setMessage(`${domainName}`);
+        registerfastDomain()
     
       };
     
@@ -46,68 +50,31 @@ const Counter = ({counterContract, tokenContract}) => {
 
       
       const approveFunction = async () => {
+
         try {
-            setLoading(true)
-            await approve(tokenContract, performActions);
-
-        } catch (e) {
-            console.log({e})
-        } finally {
-            setLoading(false)
-        }
-
+          await performActions(async (kit) => {
+              const {defaultAccount} = kit;
+              //await  erc271Contract.methods.setApprovalForAll( BatchTransferAddress?.BatchTransfer, true).send({from: defaultAccount});
+              await tokenContract.methods.approve(CounterAddress?.FastDomain, 1e18).send({from: defaultAccount});
+          });
+      } catch (e) {
+          console.log({e});
       }
+    }
     
-    const increment = async () => {
+    const registerfastDomain = async () => {
         try {
             setLoading(true)
-            await increaseCount(counterContract, performActions);
-            await updateCount()
-
-        } catch (e) {
-            console.log({e})
-        } finally {
-            setLoading(false)
-        }
-    };
-
-    const decrement = async () => {
-        try {
-            setLoading(true)
-            await decreaseCount(counterContract, performActions);
-
-            await updateCount()
-        } catch (e) {
-            console.log({e})
-        } finally {
-            setLoading(false)
-        }
-    };
-
-    const updateCount = async () => {
-        try {
-
-            setLoading(true)
-            const value = await getCount(counterContract)
-            setCount(value)
-        } catch (e) {
-            console.log({e})
-        } finally {
-            setLoading(false)
-        }
-    };
-    const registerFastDomain = async () => {
-        try {
-            setLoading(true)
+            console.log("registerFastDomain", domainName)
             approveFunction()
-            const value = await registerFastDomain(counterContract, performActions, domainName)
-                console.log("value ",value)
-                setCount(value)
-                updateInput()
+            await registerFastDomain(counterContract, performActions, domainName)
         } catch (e) {
-            console.log({e})
+          const errorDiv = document.querySelector('.error-message');
+          errorDiv.style.display = 'block';
+            console.log("error", {e})
         } finally {
             setLoading(false)
+            updateInput()
         }
     };
 
@@ -117,9 +84,11 @@ const Counter = ({counterContract, tokenContract}) => {
             const value = await getConnectedAddressDomain(counterContract, performActions)
             if (value === undefined){
                 console.log("You don't have a domain yet")
+                setUserDomain("You don't have a domain yet")
                 setCount("You don't have a domain yet")
             } else{
                 console.log("value ",value)
+                setUserDomain(value)
                 setCount(value)
             }
         } catch (e) {
@@ -170,6 +139,7 @@ const Counter = ({counterContract, tokenContract}) => {
 
         {/* ======= Hero Section ======= */}
         <section id="hero">
+          <p> {userDomain}</p>
           <div className="hero-container">
             <h1>Welcome to FastDomain</h1>
             <h2>Register your domain</h2>
@@ -186,7 +156,12 @@ const Counter = ({counterContract, tokenContract}) => {
               </div>
               <div className="my-3">
                 <div className="loading">Loading</div>
-                <div className="error-message" />
+                <div className="error-message"> 
+                <p>error</p>
+                <Button className="m-2" variant="dark" size="lg" onClick={mintFastToken}>
+                        Mint Token
+                  </Button>
+                 </div>
                 <div className="sent-message">Your notification request was sent. Thank you!</div>
               </div>
               <div className="text-center"><button type="submit" >Submit!</button></div>
@@ -201,7 +176,7 @@ const Counter = ({counterContract, tokenContract}) => {
             <div className="container">
               <div className="row">
                 <div className="col-lg-6">
-                  <img src={aboutImage.default} className="img-fluid" alt="about image" />
+                  <img src={aboutImage.default} className="img-fluid" alt="about" />
                 </div>
                 <div className="col-lg-6 pt-4 pt-lg-0">
                   <h3>Most Recent Domain</h3>
@@ -261,45 +236,47 @@ const Counter = ({counterContract, tokenContract}) => {
           <section id="contact" className="contact section-bg">
             <div className="container">
               <div className="section-title">
-                <h2>Contact Us</h2>
+                <h2>Mint Token</h2>
               </div>
               <div className="row justify-content-center">
                 <div className="col-lg-3 col-md-5 mb-5 mb-md-0">
                   <div className="info">
                     <div className="address">
                       <i className="bx bx-map" />
-                      <p>A108 Adam Street<br />New York, NY 535022</p>
+                      <p>Mint Fast Token for Free and register name </p>
                     </div>
                     <div className="email">
                       <i className="bx bx-envelope" />
-                      <p>info@example.com</p>
+                      <p>Do you want to reassign your domain name?</p>
                     </div>
-                    <div className="phone">
+                    {/* <div className="phone">
                       <i className="bx bx-phone-call" />
                       <p>+1 5589 55488 55s</p>
-                    </div>
+                    </div> */}
                   </div>
-                  <div className="social-links">
+                  {/* <div className="social-links">
                     <a href="#" className="twitter"><i className="bx bxl-twitter" /></a>
                     <a href="#" className="facebook"><i className="bx bxl-facebook" /></a>
                     <a href="#" className="instagram"><i className="bx bxl-instagram" /></a>
                     <a href="#" className="linkedin"><i className="bx bxl-linkedin" /></a>
-                  </div>
+                  </div> */}
                 </div>
                 <div className="col-lg-5 col-md-7">
                   <form action="forms/contact.php" method="post" role="form" className="email-form">
-                    <div className="form-group">
+                    {/* <div className="form-group">
                       <input type="text" name="name" className="form-control" id="name" placeholder="Your Name" required />
+                    </div> */}
+                    <div className="form-group">
+                    <Button className="m-2" variant="dark" size="lg" onClick={mintFastToken}>
+                        Mint Token
+                  </Button>
                     </div>
                     <div className="form-group mt-3">
-                      <input type="email" className="form-control" name="email" id="email" placeholder="Your Email" required />
+                      <input type="text" className="form-control" name="subject" id="subject" placeholder="New Domain name" required />
                     </div>
-                    <div className="form-group mt-3">
-                      <input type="text" className="form-control" name="subject" id="subject" placeholder="Subject" required />
-                    </div>
-                    <div className="form-group mt-3">
+                    {/* <div className="form-group mt-3">
                       <textarea className="form-control" name="message" rows={5} placeholder="Message" required defaultValue={""} />
-                    </div>
+                    </div> */}
                     <div className="my-3">
                       <div className="loading">Loading</div>
                       <div className="error-message" />
@@ -316,24 +293,19 @@ const Counter = ({counterContract, tokenContract}) => {
         <footer id="footer">
           <div className="container">
             <div className="copyright">
-              © Copyright <strong><span>Siimple</span></strong>. All Rights Reserved
+              © Copyright <strong><span>FastDomain</span></strong>. All Rights Reserved
             </div>
             <div className="credits">
-              {/* All the links in the footer should remain intact. */}
-              {/* You can delete the links only if you purchased the pro version. */}
-              {/* Licensing information: https://bootstrapmade.com/license/ */}
-              {/* Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/free-bootstrap-landing-page/ */}
               Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
             </div>
           </div>
         </footer>{/* End #footer */}
-        {/* Vendor JS Files */}
-        {/* Template Main JS File */}
+
       </div>
                         <Card.Title>Count: {count}</Card.Title>
-                        <Button className="m-2" variant="dark" size="lg" onClick={increment}>
+                        {/* <Button className="m-2" variant="dark" size="lg" onClick={increment}>
                             Increase Count
-                        </Button>
+                        </Button> */}
 
                         <Button className="m-2" variant="dark" size="lg" onClick={fetchDomain}>
                         Fetch Domain
@@ -349,7 +321,7 @@ const Counter = ({counterContract, tokenContract}) => {
                         </Button>
 
 
-                        <Button
+                        {/* <Button
                             className="m-2"
                             variant="outline-dark"
                             disabled={count < 1}
@@ -357,7 +329,7 @@ const Counter = ({counterContract, tokenContract}) => {
                             onClick={decrement}
                         >
                             Decrease Count
-                        </Button>
+                        </Button> */}
                     </div>
                     :
                     <Loader/>
