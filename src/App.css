@@ -512,7 +512,7 @@ h6,
 }
 
 #hero .email-form .sent-message {
-  display: block;
+  display: none;
   color: #fff;
   background: #18d26e;
   text-align: center;

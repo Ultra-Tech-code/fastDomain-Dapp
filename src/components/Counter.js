@@ -48,27 +48,33 @@ const Counter = ({counterContract, tokenContract}) => {
       }
 
     
+    // const registerfastDomain = async () => {
+    //     try {
+    //         setLoading(true)
+    //         await approve(tokenContract, performActions);
+    //         // await registerFastDomain(counterContract, performActions, domainName)
+    //         document.querySelector('.sent-message').style.display = 'block';
+    //     } catch (e) {
+
+    //         document.querySelector('.error-message').style.display = 'block';
+    //         console.log("error", {e})
+    //     } finally {
+    //         setLoading(false)
+    //     }
+    // };
+
     const registerfastDomain = async () => {
-        try {
-            setLoading(true)
-            const sentmesage = document.querySelector('.sent-message');
-            sentmesage.style.display = 'block';
-            approve(tokenContract, performActions)
-            // await registerFastDomain(counterContract, performActions, domainName)
-
-            document.querySelector('.sent-message').style.display = 'block';
-        } catch (e) {
-
-            document.querySelector('.error-message').style.display = 'block';
-            console.log("error", {e})
-        } finally {
-          const sentmesage = document.querySelector('.sent-message');
-          sentmesage.style.display = 'block';
-            setLoading(false)
-            updateInput()
-            fetchDomain()
-            fetchAllDomain()
-        }
+      try {
+          setLoading(true);
+          await approve(tokenContract, performActions);
+          // await registerFastDomain(counterContract, performActions, domainName);
+          document.querySelector('.sent-message').style.display = 'block';
+      } catch (e) {
+        console.log("Error:", {e});
+        document.querySelector('.error-message').style.display = 'block';
+      } finally {
+        setLoading(false);
+      }
     };
 
     const fetchDomain = async () => {
@@ -153,9 +159,6 @@ const Counter = ({counterContract, tokenContract}) => {
                 <Button className="m-2" variant="dark" size="lg" onClick={mintFastToken}>
                         Mint Token
                   </Button>
-                 </div>
-                 <div className="Approval-error"> 
-                  <p>Approval Error</p>
                  </div>
                 <div className="sent-message">Your notification request was sent. Thank you!</div>
               </div>

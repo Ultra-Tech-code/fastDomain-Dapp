@@ -11,7 +11,7 @@ export const approve = async (tokenContract, performActions) => {
         });
     } catch (e) {
         console.log({e});
-        document.querySelector('.Approval-error').style.display='block';
+        // document.querySelector('.Approval-error').style.display='block';
     }
 }
 
