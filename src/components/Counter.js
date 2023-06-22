@@ -249,23 +249,10 @@ const Counter = ({counterContract, tokenContract}) => {
                       <i className="bx bx-envelope" />
                       <p>Do you want to reassign your domain name?</p>
                     </div>
-                    {/* <div className="phone">
-                      <i className="bx bx-phone-call" />
-                      <p>+1 5589 55488 55s</p>
-                    </div> */}
                   </div>
-                  {/* <div className="social-links">
-                    <a href="#" className="twitter"><i className="bx bxl-twitter" /></a>
-                    <a href="#" className="facebook"><i className="bx bxl-facebook" /></a>
-                    <a href="#" className="instagram"><i className="bx bxl-instagram" /></a>
-                    <a href="#" className="linkedin"><i className="bx bxl-linkedin" /></a>
-                  </div> */}
                 </div>
                 <div className="col-lg-5 col-md-7">
-                  <form action="forms/contact.php" method="post" role="form" className="email-form">
-                    {/* <div className="form-group">
-                      <input type="text" name="name" className="form-control" id="name" placeholder="Your Name" required />
-                    </div> */}
+                  <form className="email-form">
                     <div className="form-group">
                     <Button className="m-2" variant="dark" size="lg" onClick={mintFastToken}>
                         Mint Token
@@ -274,9 +261,6 @@ const Counter = ({counterContract, tokenContract}) => {
                     <div className="form-group mt-3">
                       <input type="text" className="form-control" name="subject" id="subject" placeholder="New Domain name" required />
                     </div>
-                    {/* <div className="form-group mt-3">
-                      <textarea className="form-control" name="message" rows={5} placeholder="Message" required defaultValue={""} />
-                    </div> */}
                     <div className="my-3">
                       <div className="loading">Loading</div>
                       <div className="error-message" />
