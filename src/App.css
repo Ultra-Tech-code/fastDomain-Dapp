@@ -502,8 +502,17 @@ h6,
   font-weight: 600;
 }
 
-#hero .email-form .sent-message {
+#hero .email-form .Approval-error{
   display: none;
+  color: #fff;
+  background: #ed3c0d;
+  text-align: center;
+  padding: 15px;
+  font-weight: 600;
+}
+
+#hero .email-form .sent-message {
+  display: block;
   color: #fff;
   background: #18d26e;
   text-align: center;

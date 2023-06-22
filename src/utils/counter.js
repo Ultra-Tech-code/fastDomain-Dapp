@@ -1,13 +1,17 @@
 import CounterAddress from "../contracts/CounterAddress.json";
+import BigNumber from "bignumber.js"
+
 
 export const approve = async (tokenContract, performActions) => {
     try {
         await performActions(async (kit) => {
             const {defaultAccount} = kit;
-            await tokenContract.methods.approve(CounterAddress.FastDomain, 1e18).send({from: defaultAccount});
+            let amountToApprove = new BigNumber(1).shiftedBy(18).toString()
+            await tokenContract.methods.approve(CounterAddress?.FastDomain, amountToApprove).send({from: defaultAccount});
         });
     } catch (e) {
         console.log({e});
+        document.querySelector('.Approval-error').style.display='block';
     }
 }
 

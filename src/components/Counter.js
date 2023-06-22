@@ -2,7 +2,6 @@ import React, {useState, useEffect} from "react"
 import {Card, Button} from "react-bootstrap";
 import {useContractKit} from "@celo-tools/use-contractkit";
 import {getDomain,registerFastDomain, getConnectedAddressDomain, mintToken, getAllregisteredDomains, approve} from "../utils/counter";
-import CounterAddress from "../contracts/CounterAddress.json";
 import Loader from "./ui/Loader";
 import {NotificationSuccess} from "./ui/Notifications";
 import { BiCalendarEdit, BiBookReader, BiLandscape} from "react-icons/bi";
@@ -48,33 +47,27 @@ const Counter = ({counterContract, tokenContract}) => {
         // settotalID("");
       }
 
-      
-      const approveFunction = async () => {
-
-        try {
-          await performActions(async (kit) => {
-              const {defaultAccount} = kit;
-              //await  erc271Contract.methods.setApprovalForAll( BatchTransferAddress?.BatchTransfer, true).send({from: defaultAccount});
-              await tokenContract.methods.approve(CounterAddress?.FastDomain, 1e18).send({from: defaultAccount});
-          });
-      } catch (e) {
-          console.log({e});
-      }
-    }
     
     const registerfastDomain = async () => {
         try {
             setLoading(true)
-            console.log("registerFastDomain", domainName)
-            approveFunction()
-            await registerFastDomain(counterContract, performActions, domainName)
+            const sentmesage = document.querySelector('.sent-message');
+            sentmesage.style.display = 'block';
+            approve(tokenContract, performActions)
+            // await registerFastDomain(counterContract, performActions, domainName)
+
+            document.querySelector('.sent-message').style.display = 'block';
         } catch (e) {
-          const errorDiv = document.querySelector('.error-message');
-          errorDiv.style.display = 'block';
+
+            document.querySelector('.error-message').style.display = 'block';
             console.log("error", {e})
         } finally {
+          const sentmesage = document.querySelector('.sent-message');
+          sentmesage.style.display = 'block';
             setLoading(false)
             updateInput()
+            fetchDomain()
+            fetchAllDomain()
         }
     };
 
@@ -157,10 +150,12 @@ const Counter = ({counterContract, tokenContract}) => {
               <div className="my-3">
                 <div className="loading">Loading</div>
                 <div className="error-message"> 
-                <p>error</p>
                 <Button className="m-2" variant="dark" size="lg" onClick={mintFastToken}>
                         Mint Token
                   </Button>
+                 </div>
+                 <div className="Approval-error"> 
+                  <p>Approval Error</p>
                  </div>
                 <div className="sent-message">Your notification request was sent. Thank you!</div>
               </div>
