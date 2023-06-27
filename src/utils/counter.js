@@ -13,6 +13,8 @@ export const approve = async (tokenContract, performActions) => {
         console.log({e});
         // document.querySelector('.Approval-error').style.display='block';
     }
+
+    return "done";
 }
 
 

@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from "react"
+import React, {useState, useEffect, useRef} from "react"
 import {Card, Button} from "react-bootstrap";
 import {useContractKit} from "@celo-tools/use-contractkit";
 import {getDomain,registerFastDomain, getConnectedAddressDomain, mintToken, getAllregisteredDomains, approve} from "../utils/counter";
@@ -19,6 +19,8 @@ const Counter = ({counterContract, tokenContract}) => {
     const [allDomain, setallDomain] = useState(""); //alldomain fetch
     const [userDomain, setUserDomain] = useState(""); //userdomain
     const {performActions} = useContractKit();
+    const titleRef = useRef("");
+  
 
     useEffect(() => {
         try {
@@ -48,34 +50,44 @@ const Counter = ({counterContract, tokenContract}) => {
       }
 
     
-    // const registerfastDomain = async () => {
-    //     try {
-    //         setLoading(true)
-    //         await approve(tokenContract, performActions);
-    //         // await registerFastDomain(counterContract, performActions, domainName)
-    //         document.querySelector('.sent-message').style.display = 'block';
-    //     } catch (e) {
-
-    //         document.querySelector('.error-message').style.display = 'block';
-    //         console.log("error", {e})
-    //     } finally {
-    //         setLoading(false)
-    //     }
-    // };
-
     const registerfastDomain = async () => {
-      try {
-          setLoading(true);
-          await approve(tokenContract, performActions);
-          // await registerFastDomain(counterContract, performActions, domainName);
-          document.querySelector('.sent-message').style.display = 'block';
-      } catch (e) {
-        console.log("Error:", {e});
-        document.querySelector('.error-message').style.display = 'block';
-      } finally {
-        setLoading(false);
-      }
+        try {
+            setLoading(true); 
+             await approve(tokenContract, performActions);
+            // if(res){
+            //   console.log("done ")
+              
+            //   titleRef.current.style.display = 'block';
+            //   //document.querySelector('.sent-message').style.display = 'block';
+            // }
+            // await registerFastDomain(counterContract, performActions, domainName)
+            console.log("function run success")
+            return true;
+        } catch (e) {
+            //document.querySelector('.error-message').style.visibility = 'visible';
+            console.log("error", e)
+        } finally {
+            setLoading(false)
+        }
     };
+
+    if(registerfastDomain){
+      titleRef.current.style.display = 'block';
+    }
+
+    // const registerfastDomain = async () => {
+    //   try {
+    //       setLoading(true);
+    //       await approve(tokenContract, performActions);
+    //       // await registerFastDomain(counterContract, performActions, domainName);
+    //       document.querySelector('.sent-message').style.display = 'block';
+    //   } catch (e) {
+    //     console.log("Error:", {e});
+    //     document.querySelector('.error-message').style.display = 'block';
+    //   } finally {
+    //     setLoading(false);
+    //   }
+    // };
 
     const fetchDomain = async () => {
         try {
@@ -160,7 +172,7 @@ const Counter = ({counterContract, tokenContract}) => {
                         Mint Token
                   </Button>
                  </div>
-                <div className="sent-message">Your notification request was sent. Thank you!</div>
+                <div className="sendMessage" ref={titleRef}>Your notification request was sent. Thank you!</div>
               </div>
               <div className="text-center"><button type="submit" >Submit!</button></div>
             </form>

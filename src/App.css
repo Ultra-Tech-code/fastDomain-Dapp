@@ -494,7 +494,7 @@ h6,
 }
 
 #hero .email-form .error-message {
-  display: none;
+  visibility: hidden;
   color: #fff;
   background: #ed3c0d;
   text-align: center;
@@ -511,7 +511,7 @@ h6,
   font-weight: 600;
 }
 
-#hero .email-form .sent-message {
+#hero .email-form .sendMessage {
   display: none;
   color: #fff;
   background: #18d26e;
