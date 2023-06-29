@@ -1,11 +1,11 @@
 import { useState, useEffect, useCallback } from "react";
 import { useContractKit } from "@celo-tools/use-contractkit";
-import { useCounterContract } from "./useCounterContract";
+import { useFastDomainContract } from "./useFastDomainContract";
 
 export const useCount = () => {
   const { address, kit } = useContractKit();
   const [count, setCount] = useState(0);
-  const counterContract = useCounterContract();
+  const counterContract = useFastDomainContract();
 
   const getCount = useCallback(async () => {
     if (!counterContract) return;

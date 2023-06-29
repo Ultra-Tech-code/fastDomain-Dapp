@@ -5,13 +5,13 @@ import { Notification } from "./components/ui/Notifications";
 import Wallet from "./components/Wallet";
 import Cover from "./components/Cover";
 import Counter from "./components/Counter";
-import { useBalance, useCounterContract, useTokenContract } from "./hooks";
+import { useBalance, useFastDomainContr, useTokenContract } from "./hooks";
 import "./App.css";
 
 const App = function AppWrapper() {
   const { address, destroy, connect } = useContractKit();
   const { balance } = useBalance();
-  const counterContract = useCounterContract();
+  const counterContract = useFastDomainContract();
   const tokenContract = useTokenContract();
 
   return (

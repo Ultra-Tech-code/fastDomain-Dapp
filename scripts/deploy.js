@@ -12,9 +12,19 @@ async function main() {
   // If this script is run directly using `node` you may want to call compile
   // manually to make sure everything is compiled
   // await hre.run('compile');
+  const FastDomainNFT = await hre.ethers.getContractFactory("FastDomainNFT");
+  const FastdomainNFT = await FastDomainNFT.deploy();
 
-  const Counter = await hre.ethers.getContractFactory("Counter");
-  const deployed = await Counter.deploy();
+  await FastdomainNFT.deployed();
+
+  const FastToken = await hre.ethers.getContractFactory("FastToken");
+  const Fasttoken = await FastToken.deploy();
+
+  await Fasttoken.deployed();
+
+
+  const FastDomain = await hre.ethers.getContractFactory("FastDomain");
+  const deployed = await FastDomain.deploy(Fasttoken.address, FastdomainNFT.address);
 
   await deployed.deployed();
 
@@ -31,15 +41,15 @@ function storeContractData(contract) {
   }
 
   fs.writeFileSync(
-    contractsDir + "/CounterAddress.json",
+    contractsDir + "/FastDomainAddress.json",
     JSON.stringify({ Counter: contract.address }, undefined, 2)
   );
 
-  const CounterArtifact = artifacts.readArtifactSync("Counter");
+  const FastDomainArtifact = artifacts.readArtifactSync("FastDomain");
 
   fs.writeFileSync(
-    contractsDir + "/Counter.json",
-    JSON.stringify(CounterArtifact, null, 2)
+    contractsDir + "/FastDomain.json",
+    JSON.stringify(FastDomainArtifact, null, 2)
   );
 }
 

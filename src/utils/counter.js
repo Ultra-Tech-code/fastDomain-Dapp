@@ -1,4 +1,4 @@
-import CounterAddress from "../contracts/CounterAddress.json";
+import FastDomainAddress from "../contracts/FastDomainAddress.json";
 import BigNumber from "bignumber.js"
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -10,7 +10,7 @@ export const approve = async (tokenContract, performActions) => {
         await performActions(async (kit) => {
             const {defaultAccount} = kit;
             let amountToApprove = new BigNumber(1).shiftedBy(18).toString()
-            await tokenContract.methods.approve(CounterAddress?.FastDomain, amountToApprove).send({from: defaultAccount});
+            await tokenContract.methods.approve(FastDomainAddress?.FastDomain, amountToApprove).send({from: defaultAccount});
             toast(<NotificationSuccess text="Approval Successfull...." />); 
         });
     } catch (e) {
