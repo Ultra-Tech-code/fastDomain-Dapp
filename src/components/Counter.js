@@ -148,12 +148,17 @@ const Counter = ({counterContract, tokenContract}) => {
   const reAssignDomain = async () => {
     try {
         setLoading(true)
-        await approve(tokenContract, performActions);
-       await reassignDomain(counterContract,performActions, newDomainName)
+        const value = await isDomainRegistered(counterContract , newDomainName)
+        if(value === false){
+          await approve(tokenContract, performActions);
+          await reassignDomain(counterContract,performActions, newDomainName)
+        }
     } catch (e) {
         console.log({e})
     } finally {
         setLoading(false)
+        setNewdomain("")
+        fetchAllDomain()
     }
 };
 
@@ -175,217 +180,338 @@ const Counter = ({counterContract, tokenContract}) => {
 
     
 
-    return (  
-                <div>
-                {!loading
-                    ?
-                    <div >
-                        
-        {/* ======= Hero Section ======= */}
-        <section id="hero">
-          <div className="hero-container">
-            <h1>Welcome to FastDomain</h1>
-            <h2>Register your domain</h2>
+    return (
+      <div>
+        {!loading ? (
+          <div>
+            {/* ======= Hero Section ======= */}
+            <section id="hero">
+                              
+                  <svg viewBox="0 0 100 100" width="70" height="70">
+                  <defs>
+                    <path id="circle"
+                      d="
+                        M 50, 50
+                        m -37, 0
+                        a 37,37 0 1,1 74,0
+                        a 37,37 0 1,1 -74,0"/>
+                  </defs>
+                  <text font-size="17">
+                    <textPath xlinkHref="#circle">
+                      {allDomain.length} Domain Name Registered 
+                    </textPath>
+                  </text>
+                </svg>
 
-            <form onSubmit={handleSubmit} className="email-form">
-              <div className="row no-gutters">
-                <div className="col-md-6 form-group pr-md-1">
-                  <input type="text" id="domainName" name="name" className="form-control" value={domainName} placeholder="Domain Name" required onChange={(event) => setdomainName(event.target.value)}/>
-                </div>
-                <div></div>
-              </div>
-              <div className="text-center"><button type="submit" >Submit!</button></div>
-            </form>
+              <div className="hero-container">
+                <h1>Welcome to FastDomain</h1>
+                <h2>Register your domain</h2>
 
-          </div>
-
-        </section>{/* #hero */}
-        <main id="main">
-          {/* ======= About Section ======= */}
-          <section id="about" className="about">
-            <div className="container">
-              <div className="row">
-                <div className="col-lg-6">
-                  <img src={aboutImage.default} className="img-fluid" alt="about" />
-                </div>
-                <div className="col-lg-6 pt-4 pt-lg-0">
-                <div className="section-title">
-                    <h2>Most Recent Domain</h2>
-                </div>
-                  <p className="fst-italic display-6" >
-                    {allDomain.map((element, index) => (
-                      <p key={index}>{element}</p>
-                    ))}
-
-                  </p>
-                </div>
-              </div>
-            </div>
-          </section>{/* End About Section */}
-          {/* ======= Why Us Section ======= */}
-
-          <section id="why-us" className="why-us section-bg">
-            <div className="container">
-              <div className="row">
-                <div className="col-lg-4 col-md-6 d-flex align-items-stretch">
-                  <div className="card">
-                    <img src={whyUs1.default} className="card-img-top" alt="..." />
-                    <div className="card-icon">
-                      <i><BiBookReader /> </i>
+                <form onSubmit={handleSubmit} className="email-form">
+                  <div className="row no-gutters">
+                    <div className="col-md-6 form-group pr-md-1">
+                      <input
+                        type="text"
+                        id="domainName"
+                        name="name"
+                        className="form-control"
+                        value={domainName}
+                        placeholder="Domain Name"
+                        required
+                        onChange={(event) => setdomainName(event.target.value)}
+                      />
                     </div>
-                    <div className="card-body">
-                      <h5 className="card-title"><a href>Our Mission</a></h5>
-                      <p className="card-text"> Our mission is to simplify blockchain transactions by providing a user-friendly Naming Service (FastDomain) app for CELO blockchain. We aim to enhance accessibility and ease of use for users, enabling them to interact with the decentralized web seamlessly.</p>
+                    <div></div>
+                  </div>
+                  <div className="text-center">
+                    <button type="submit">Submit!</button>
+                  </div>
+                </form>
+              </div>
+            </section>
+            {/* #hero */}
+            <main id="main">
+              {/* ======= About Section ======= */}
+              <section id="about" className="about">
+                <div className="container">
+                  <div className="row">
+                    <div className="col-lg-6">
+                      <img
+                        src={aboutImage.default}
+                        className="img-fluid"
+                        alt="about"
+                      />
+                    </div>
+                    <div className="col-lg-6 pt-4 pt-lg-0">
+                      <div className="section-title">
+                        <h2>Most Recent Domain</h2>
+                      </div>
+                      <p className="fst-italic display-6">
+                        {allDomain.slice(-4).map((element, index) => (
+                          <p key={index}>{element}</p>
+                        ))}
+                      </p>
                     </div>
                   </div>
                 </div>
-                <div className="col-lg-4 col-md-6 d-flex align-items-stretch">
-                  <div className="card">
-                    <img src={whyUs2.default} className="card-img-top" alt="..." />
-                    <div className="card-icon">
-                      <i> <BiCalendarEdit /> </i>
+              </section>
+              {/* End About Section */}
+              {/* ======= Why Us Section ======= */}
+
+              <section id="why-us" className="why-us section-bg">
+                <div className="container">
+                  <div className="row">
+                    <div className="col-lg-4 col-md-6 d-flex align-items-stretch">
+                      <div className="card">
+                        <img
+                          src={whyUs1.default}
+                          className="card-img-top"
+                          alt="..."
+                        />
+                        <div className="card-icon">
+                          <i>
+                            <BiBookReader />{" "}
+                          </i>
+                        </div>
+                        <div className="card-body">
+                          <h5 className="card-title">
+                            <a href>Our Mission</a>
+                          </h5>
+                          <p className="card-text">
+                            {" "}
+                            Our mission is to simplify blockchain transactions
+                            by providing a user-friendly Naming Service
+                            (FastDomain) app for CELO blockchain. We aim to
+                            enhance accessibility and ease of use for users,
+                            enabling them to interact with the decentralized web
+                            seamlessly.
+                          </p>
+                        </div>
+                      </div>
                     </div>
-                    <div className="card-body">
-                      <h5 className="card-title"><a href>Our Plan</a></h5>
-                      <p className="card-text"> Our plan involves developing a robust Naming Service app that allows users to register and manage their Celo domain names effortlessly. We will prioritize creating an intuitive and secure interface that integrates seamlessly with existing Celo wallets and dApp browsers. Additionally, we will continuously enhance our app with new features and updates to ensure an exceptional user experience. </p>
+                    <div className="col-lg-4 col-md-6 d-flex align-items-stretch">
+                      <div className="card">
+                        <img
+                          src={whyUs2.default}
+                          className="card-img-top"
+                          alt="..."
+                        />
+                        <div className="card-icon">
+                          <i>
+                            {" "}
+                            <BiCalendarEdit />{" "}
+                          </i>
+                        </div>
+                        <div className="card-body">
+                          <h5 className="card-title">
+                            <a href>Our Plan</a>
+                          </h5>
+                          <p className="card-text">
+                            {" "}
+                            Our plan involves developing a robust Naming Service
+                            app that allows users to register and manage their
+                            Celo domain names effortlessly. We will prioritize
+                            creating an intuitive and secure interface that
+                            integrates seamlessly with existing Celo wallets and
+                            dApp browsers. Additionally, we will continuously
+                            enhance our app with new features and updates to
+                            ensure an exceptional user experience.{" "}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="col-lg-4 col-md-6 d-flex align-items-stretch">
+                      <div className="card">
+                        <img
+                          src={whyUs3.default}
+                          className="card-img-top"
+                          alt="..."
+                        />
+                        <div className="card-icon">
+                          <i>
+                            {" "}
+                            <BiLandscape />{" "}
+                          </i>
+                        </div>
+                        <div className="card-body">
+                          <h5 className="card-title">
+                            <a href>Our Vision</a>
+                          </h5>
+                          <p className="card-text">
+                            {" "}
+                            Our vision is to empower individuals and businesses
+                            by enabling them to have personalized and easily
+                            recognizable blockchain identities through our
+                            FastDomain app. We strive to foster widespread
+                            adoption of Naming Service and contribute to the
+                            growth of the decentralized web ecosystem.
+                            Ultimately, we envision a future where blockchain
+                            addresses are replaced by human-readable names,
+                            making cryptocurrency transactions more accessible
+                            and user-friendly for everyone{" "}
+                          </p>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
-                <div className="col-lg-4 col-md-6 d-flex align-items-stretch">
-                  <div className="card">
-                    <img src={whyUs3.default} className="card-img-top" alt="..." />
-                    <div className="card-icon">
-                      <i> <BiLandscape /> </i>
+              </section>
+              {/* End Why Us Section */}
+
+              {/* ======= Mint Token Section ======= */}
+              <section id="contact" className="contact section-bg">
+                <div className="container">
+                  <div className="section-title">
+                    <h2>Mint Token</h2>
+                  </div>
+                  <div className="row justify-content-center">
+                    <div className="col-lg-3 col-md-5 mb-2 mb-md-0">
+                      <div className="info txt">
+                        <div className="card-icon">
+                          <i>
+                            <BiDollarCircle />{" "}
+                          </i>
+                        </div>
+                        <p className="txt">
+                          Mint Fast Token for Free and register name{" "}
+                        </p>
+                      </div>
                     </div>
-                    <div className="card-body">
-                      <h5 className="card-title"><a href>Our Vision</a></h5>
-                      <p className="card-text"> Our vision is to empower individuals and businesses by enabling them to have personalized and easily recognizable blockchain identities through our FastDomain app. We strive to foster widespread adoption of Naming Service and contribute to the growth of the decentralized web ecosystem. Ultimately, we envision a future where blockchain addresses are replaced by human-readable names, making cryptocurrency transactions more accessible and user-friendly for everyone </p>
+                    <div className="col-lg-5 col-md-7">
+                      <form className="email-form">
+                        <div className="form-group">
+                          <div className="text-center mt-2">
+                            <button type="submit" onClick={mintFastToken}>
+                              Mint Token
+                            </button>
+                          </div>
+                        </div>
+                      </form>
                     </div>
                   </div>
                 </div>
-              </div>
-            </div>
-          </section>{/* End Why Us Section */}
-      
-          {/* ======= Mint Token Section ======= */}
-          <section id="contact" className="contact section-bg">
-            <div className="container">
-              <div className="section-title">
-                <h2>Mint Token</h2>
-              </div>
-              <div className="row justify-content-center">
-                <div className="col-lg-3 col-md-5 mb-2 mb-md-0">
-                  <div className="info txt">
-                      <div className="card-icon">
-                      <i><BiDollarCircle/> </i>
-                    </div>
-                      <p className="txt">Mint Fast Token for Free and register name </p>
-                    </div>
-                </div>
-                <div className="col-lg-5 col-md-7">
-                  <form className="email-form">
-                    <div className="form-group">
-                    <div className="text-center mt-2">
-                    <button type="submit"  onClick={mintFastToken}>
-                        Mint Token
-                  </button>
+              </section>
+              {/* End mint Token Section */}
+
+              {/* ======= Reassign Domain Section ======= */}
+              <section id="contact" className="contact section-bg">
+                <div className="container">
+                  <div className="section-title">
+                    <h2>Reassign Domain</h2>
                   </div>
+                  <div className="row justify-content-center">
+                    <div className="col-lg-3 col-md-5 mb-2 mb-md-0">
+                      <div className="info txt">
+                        <div className="card-icon">
+                          <i>
+                            <BiSort />{" "}
+                          </i>
+                        </div>
+                        <p className="txt">
+                          Do you want to reassign your domain name?
+                        </p>
+                      </div>
                     </div>
-                  </form>
-                </div>
-              </div>
-            </div>
-          </section>{/* End mint Token Section */}
-
-
-                    {/* ======= Reassign Domain Section ======= */}
-          <section id="contact" className="contact section-bg">
-            <div className="container">
-              <div className="section-title">
-                <h2>Reassign Domain</h2>
-              </div>
-              <div className="row justify-content-center">
-                <div className="col-lg-3 col-md-5 mb-2 mb-md-0">
-                  <div className="info txt">
-                  <div className="card-icon">
-                      <i><BiSort/> </i>
+                    <div className="col-lg-5 col-md-7">
+                      <form onSubmit={reAssignSubmit} className="email-form">
+                        <div className="row no-gutters">
+                          <div className="form-group mt-1">
+                            <input
+                              type="text"
+                              id="newDomainName"
+                              name="name"
+                              className="form-control"
+                              value={newDomainName}
+                              placeholder="New Domain Name"
+                              required
+                              onChange={(event) =>
+                                setNewdomain(event.target.value)
+                              }
+                            />
+                          </div>
+                          <div></div>
+                        </div>
+                        <div className="text-center mt-2">
+                          <button type="submit">Submit!</button>
+                        </div>
+                      </form>
                     </div>
-                      <p className="txt">Do you want to reassign your domain name?</p>
+                  </div>
+                </div>
+              </section>
+              {/* END reassign Domain Section */}
+
+              {/* ======= Get Domain Section ======= */}
+              <section id="contact" className="contact section-bg">
+                <div className="container">
+                  <div className="section-title">
+                    <h2>Get Domain name</h2>
+                  </div>
+                  <div className="row justify-content-center">
+                    <div className="col-lg-3 col-md-5 mb-2 mb-md-0">
+                      <div className="info txt">
+                        <div className="card-icon">
+                          <i>
+                            <BiCalendarEdit />{" "}
+                          </i>
+                        </div>
+                        <p className="txt">
+                          Get Domain name associated with an address
+                        </p>
+                      </div>
                     </div>
-                </div>
-                <div className="col-lg-5 col-md-7">
-
-                <form onSubmit={reAssignSubmit} className="email-form">
-              <div className="row no-gutters">
-                <div className="form-group mt-1">
-                  <input type="text" id="newDomainName" name="name" className="form-control" value={newDomainName} placeholder="New Domain Name" required onChange={(event) => setNewdomain(event.target.value)}/>
-                </div>
-                <div></div>
-              </div>
-              <div className="text-center mt-2">
-                <button type="submit" >Submit!</button>
-                </div>
-            </form>
-                </div>
-              </div>
-            </div>
-          </section>{/* END reassign Domain Section */}
-
-           {/* ======= Get Domain Section ======= */}
-          <section id="contact" className="contact section-bg">
-            <div className="container">
-              <div className="section-title">
-                <h2>Get Domain name</h2>
-              </div>
-              <div className="row justify-content-center">
-                <div className="col-lg-3 col-md-5 mb-2 mb-md-0">
-                  <div className="info txt">
-                  <div className="card-icon">
-                      <i><BiCalendarEdit/> </i>
+                    <div className="col-lg-5 col-md-7">
+                      <form onSubmit={getDomainSubmit} className="email-form">
+                        <div className="row no-gutters">
+                          <div className="form-group mt-1">
+                            <input
+                              type="text"
+                              id="userAddress"
+                              name="name"
+                              className="form-control"
+                              value={userAddress}
+                              placeholder="User Address"
+                              required
+                              onChange={(event) =>
+                                setUseraddress(event.target.value)
+                              }
+                            />
+                          </div>
+                          <div></div>
+                        </div>
+                        <div className="text-center mt-2">
+                          <button type="submit">Submit!</button>
+                        </div>
+                      </form>
                     </div>
-                      <p className="txt">Get Domain name associated with an address</p>
-                    </div>
+                  </div>
                 </div>
-                <div className="col-lg-5 col-md-7">
+              </section>
+              {/* END Get Domain Section */}
+            </main>
+            {/* End #main */}
 
-                <form onSubmit={getDomainSubmit} className="email-form">
-              <div className="row no-gutters">
-                <div className="form-group mt-1">
-                  <input type="text" id="userAddress" name="name" className="form-control" value={userAddress} placeholder="User Address" required onChange={(event) => setUseraddress(event.target.value)}/>
+            {/* ======= Footer ======= */}
+            <footer id="footer">
+              <div className="container">
+                <div className="copyright">
+                  © Copyright{" "}
+                  <strong>
+                    <span>FastDomain</span>
+                  </strong>
+                  . All Rights Reserved
                 </div>
-                <div></div>
-              </div>
-              <div className="text-center mt-2">
-                <button type="submit" >Submit!</button>
-                </div>
-            </form>
-                </div>
-              </div>
-            </div>
-          </section>{/* END Get Domain Section */}
-
-
-
-
-        </main>{/* End #main */}
-
-        {/* ======= Footer ======= */}
-        <footer id="footer">
-          <div className="container">
-            <div className="copyright">
-              © Copyright <strong><span>FastDomain</span></strong>. All Rights Reserved
-            </div>
-            {/* <div className="credits">
+                {/* <div className="credits">
               Designed by <a href="https://github.com/Ultra-Tech-code">Ultra-tech</a>
             </div> */}
+              </div>
+            </footer>
+            {/* End #footer */}
           </div>
-        </footer>{/* End #footer */}
-
+        ) : (
+          <Loader />
+        )}
       </div>
-                    :
-                    <Loader/>
-                }
-                </div>
     );
 };
 

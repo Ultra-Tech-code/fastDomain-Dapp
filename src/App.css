@@ -947,3 +947,13 @@ section {
   font-size: 28px;
   line-height: 36px;
 }
+
+
+
+svg {
+  fill: red;
+  height: auto;
+  max-width: 15vmin;
+  transform-origin: center;
+  width: 15%;
+}

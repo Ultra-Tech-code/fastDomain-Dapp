@@ -51,8 +51,10 @@ export const reassignDomain = async (counterContract, performActions, newDomainN
         await performActions(async (kit) => {
             const {defaultAccount} = kit;
             await counterContract.methods.reassignDomain(newDomainName, defaultAccount).send({from: defaultAccount});
+            toast(<NotificationSuccess text={ <span>  {defaultAccount} is now registered as  {newDomainName} &#127881; </span> }/>);
         });
     } catch (e) {
+        toast(<NotificationError text="Not enought Token" />);
         console.log({e});
     }
 };
