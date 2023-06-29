@@ -37,35 +37,29 @@ const Counter = ({counterContract, tokenContract}) => {
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        //setMessage(`${domainName}`);
         registerfastDomain()
       };
 
       const getDomainSubmit = (event) => {
         event.preventDefault();
-        getdomain(counterContract, userAddress)
+        getdomain()
       };
     
       const updateInput =() => {
         setdomainName("");
-        // setnftId("");
-        // setReceiver("");
-        // settotalID("");
       }
 
-      const registerFastDomain = async (counterContract, performActions, domainName) => {
+      const registerFastDomain = async (counterContract, performActions, _domainName) => {
         try {
             await performActions(async (kit) => {
-                console.log("registerFastDomain", domainName)
                 const {defaultAccount} = kit;
-                await counterContract.methods.registerFastDomain(domainName).send({from: defaultAccount});
-
-                toast(<NotificationSuccess text={<p>{domainName} registered successfully &#127881;</p> } />); 
+                await counterContract.methods.registerFastDomain(_domainName).send({from: defaultAccount});
+                toast(<NotificationSuccess text={<span>{_domainName} registered successfully &#127881;</span> } />); 
             });
         } catch (e) {
-          toast(<NotificationError text={<div> Insufficient Token <Button className="m-2" variant="dark" size="lg" onClick={mintFastToken}>
+          toast(<NotificationError text={<span> Insufficient Token <Button className="m-2" variant="dark" size="lg" onClick={mintFastToken}>
           Mint Token
-          </Button></div> 
+          </Button></span> 
  } />);
             console.log({e});
         }
@@ -107,10 +101,8 @@ const Counter = ({counterContract, tokenContract}) => {
 
     const fetchAllDomain = async () => {
         try {
-
             setLoading(true)
             const value = await getAllregisteredDomains(counterContract)
-            console.log("value ",value)
             setallDomain(value)
         } catch (e) {
             console.log({e})
@@ -121,10 +113,13 @@ const Counter = ({counterContract, tokenContract}) => {
 
     const getdomain = async () => {
       try {
-
           setLoading(true)
-          const value = await getDomain(counterContract, domainName)
-          console.log("value ",value)
+          const value = await getDomain(counterContract, userAddress)
+          if(value === ""){
+            toast(<NotificationSuccess text={<span> {userAddress} is not registered &#127881;</span> } />);
+          }else{
+            toast(<NotificationSuccess text={<span> {userAddress} belongs to {value} &#127881;</span> } />);
+          } 
       } catch (e) {
           console.log({e})
       } finally {
@@ -313,9 +308,9 @@ const Counter = ({counterContract, tokenContract}) => {
                 <div className="col-lg-3 col-md-5 mb-2 mb-md-0">
                   <div className="info txt">
                   <div className="card-icon">
-                      <i><BiSort/> </i>
+                      <i><BiCalendarEdit/> </i>
                     </div>
-                      <p className="txt">Get Domain name ass0ciated with an address</p>
+                      <p className="txt">Get Domain name associated with an address</p>
                     </div>
                 </div>
                 <div className="col-lg-5 col-md-7">

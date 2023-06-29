@@ -65,7 +65,7 @@ export const getConnectedAddressDomain = async (counterContract, performActions)
             const {defaultAccount} = kit;
             const value =  await counterContract.methods.getDomain(defaultAccount).call();
             if (value === undefined){
-                toast(<NotificationInfo text="You don't have a domain yet" />); 
+                toast(<NotificationInfo text={"You don't have a domain yet" }/>); 
             } else{
               toast(<NotificationInfo text={ <span> Welcome {value}</span> } />); 
                 console.log("value ",value)
