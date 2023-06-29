@@ -42,7 +42,7 @@ function storeContractData(contract) {
 
   fs.writeFileSync(
     contractsDir + "/FastDomainAddress.json",
-    JSON.stringify({ Counter: contract.address }, undefined, 2)
+    JSON.stringify({ FastDomain: contract.address }, undefined, 2)
   );
 
   const FastDomainArtifact = artifacts.readArtifactSync("FastDomain");

@@ -1,6 +1,6 @@
 import FastDomainAddress from "../contracts/FastDomainAddress.json";
 import BigNumber from "bignumber.js"
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import{ NotificationInfo, NotificationSuccess, NotificationError } from "../components/ui/Notifications"
 
@@ -22,23 +22,23 @@ export const approve = async (tokenContract, performActions) => {
 }
 
 
-export const mintToken = async (counterContract, performActions) => {
+export const mintToken = async (fastDomainContract, performActions) => {
     try {
         await performActions(async (kit) => {
             const {defaultAccount} = kit;
-            await counterContract.methods.mintToken().send({from: defaultAccount});
+            await fastDomainContract.methods.mintToken().send({from: defaultAccount});
         });
     } catch (e) {
         console.log({e});
     }
 };
 
-// export const registerFastDomain = async (counterContract, performActions, domainName) => {
+// export const registerFastDomain = async (fastDomainContract, performActions, domainName) => {
 //     try {
 //         await performActions(async (kit) => {
 //             console.log("registerFastDomain", domainName)
 //             const {defaultAccount} = kit;
-//             await counterContract.methods.registerFastDomain(domainName).send({from: defaultAccount});
+//             await fastDomainContract.methods.registerFastDomain(domainName).send({from: defaultAccount});
 //         });
 //     } catch (e) {
 //         console.log({e});
@@ -46,11 +46,11 @@ export const mintToken = async (counterContract, performActions) => {
 // };
 
 
-export const reassignDomain = async (counterContract, performActions, newDomainName) => {
+export const reassignDomain = async (fastDomainContract, performActions, newDomainName) => {
     try {
         await performActions(async (kit) => {
             const {defaultAccount} = kit;
-            await counterContract.methods.reassignDomain(newDomainName, defaultAccount).send({from: defaultAccount});
+            await fastDomainContract.methods.reassignDomain(newDomainName, defaultAccount).send({from: defaultAccount});
             toast(<NotificationSuccess text={ <span>  {defaultAccount} is now registered as  {newDomainName} &#127881; </span> }/>);
         });
     } catch (e) {
@@ -60,12 +60,12 @@ export const reassignDomain = async (counterContract, performActions, newDomainN
 };
 
 
-export const getConnectedAddressDomain = async (counterContract, performActions) => {
+export const getConnectedAddressDomain = async (fastDomainContract, performActions) => {
     try {
 
         await performActions(async (kit) => {
             const {defaultAccount} = kit;
-            const value =  await counterContract.methods.getDomain(defaultAccount).call();
+            const value =  await fastDomainContract.methods.getDomain(defaultAccount).call();
             console.log("value of user", value)
             if (value === undefined || value === ""){
                 toast(<NotificationInfo text={"You don't have a domain yet" }/>); 
@@ -81,9 +81,9 @@ export const getConnectedAddressDomain = async (counterContract, performActions)
     }
 };
 
-export const isDomainRegistered = async (counterContract, domainName) => {
+export const isDomainRegistered = async (fastDomainContract, domainName) => {
     try {
-        const value =  await counterContract.methods.isDomainRegistered(domainName).call();
+        const value =  await fastDomainContract.methods.isDomainRegistered(domainName).call();
         if(value === true){
             toast(<NotificationSuccess text="Domain name already Taken"/>);
             return;
@@ -94,19 +94,19 @@ export const isDomainRegistered = async (counterContract, domainName) => {
     }
 };
 
-export const getAllregisteredDomains = async (counterContract) => {
+export const getAllregisteredDomains = async (fastDomainContract) => {
     try {
 
-        const value =  await counterContract.methods.getAllregisteredDomains().call();
+        const value =  await fastDomainContract.methods.getAllregisteredDomains().call();
         return value
     } catch (e) {
         console.log({e});
     }
 };
 
-export const getDomain = async (counterContract, Useraddresss) => {
+export const getDomain = async (fastDomainContract, Useraddresss) => {
     try {
-        const value =  await counterContract.methods.getDomain(Useraddresss).call();
+        const value =  await fastDomainContract.methods.getDomain(Useraddresss).call();
         return value
     } catch (e) {
         console.log({e});

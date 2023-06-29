@@ -1,11 +1,11 @@
 import React, {useState, useEffect} from "react"
-import {Card, Button} from "react-bootstrap";
+import {Button} from "react-bootstrap";
 import {useContractKit} from "@celo-tools/use-contractkit";
-import {getDomain, getConnectedAddressDomain, mintToken, getAllregisteredDomains, approve, isDomainRegistered, reassignDomain} from "../utils/counter";
+import {getDomain, getConnectedAddressDomain, mintToken, getAllregisteredDomains, approve, isDomainRegistered, reassignDomain} from "../utils/fastDomain";
 import Loader from "./ui/Loader";
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import{ NotificationInfo, NotificationSuccess, NotificationError } from "./ui/Notifications"
+import{ NotificationSuccess, NotificationError } from "./ui/Notifications"
 import { BiCalendarEdit, BiBookReader, BiLandscape, BiDollarCircle, BiSort} from "react-icons/bi";
 import "../App.css"
 let aboutImage = require("../images/img/about-img.jpg");
@@ -14,9 +14,8 @@ let whyUs2 = require("../images/img/why-us-2.jpg");
 let whyUs3 = require("../images/img/why-us-3.jpg");
 
 
-const Counter = ({counterContract, tokenContract}) => {
+const FastDomain = ({fastDomainContract, tokenContract}) => {
     const [loading, setLoading] = useState(false);
-   // const [message, setMessage] = useState("");
     const [domainName, setdomainName] = useState("")
     const [userAddress, setUseraddress] = useState("");
     const [newDomainName, setNewdomain] = useState("")
@@ -25,15 +24,14 @@ const Counter = ({counterContract, tokenContract}) => {
 
     useEffect(() => {
         try {
-            if (counterContract) {
-                // updateCount()
+            if (fastDomainContract) {
                 fetchDomain()
                 fetchAllDomain()
             }
         } catch (error) {
             console.log({error});
         }
-    }, [counterContract]);
+    }, [fastDomainContract]);
 
 
     const handleSubmit = (event) => {
@@ -58,11 +56,11 @@ const Counter = ({counterContract, tokenContract}) => {
 
       }
 
-      const registerFastDomain = async (counterContract, performActions, _domainName) => {
+      const registerFastDomain = async (fastDomainContract, performActions, _domainName) => {
         try {
             await performActions(async (kit) => {
                 const {defaultAccount} = kit;
-                await counterContract.methods.registerFastDomain(_domainName).send({from: defaultAccount});
+                await fastDomainContract.methods.registerFastDomain(_domainName).send({from: defaultAccount});
                 toast(<NotificationSuccess text={<span>{_domainName} registered successfully &#127881;</span> } />); 
             });
         } catch (e) {
@@ -77,11 +75,11 @@ const Counter = ({counterContract, tokenContract}) => {
     const registerfastDomain = async () => {
         try {
             setLoading(true); 
-          const value = await isDomainRegistered(counterContract , domainName)
+          const value = await isDomainRegistered(fastDomainContract , domainName)
           const value1 = await getdomain()
              if(value === false && value1 === ""){
               await approve(tokenContract, performActions);
-              await registerFastDomain(counterContract, performActions, domainName) 
+              await registerFastDomain(fastDomainContract, performActions, domainName) 
             }
 
         } catch (e) {
@@ -100,7 +98,7 @@ const Counter = ({counterContract, tokenContract}) => {
     const fetchDomain = async () => {
         try {
             setLoading(true)
-          await getConnectedAddressDomain(counterContract, performActions)
+          await getConnectedAddressDomain(fastDomainContract, performActions)
         } catch (e) {
             console.log({e})
         } finally {
@@ -111,7 +109,7 @@ const Counter = ({counterContract, tokenContract}) => {
     const fetchAllDomain = async () => {
         try {
             setLoading(true)
-            const value = await getAllregisteredDomains(counterContract)
+            const value = await getAllregisteredDomains(fastDomainContract)
             setallDomain(value)
         } catch (e) {
             console.log({e})
@@ -130,7 +128,7 @@ const Counter = ({counterContract, tokenContract}) => {
       console.log("req addree", reqAddress)
       try {
           setLoading(true)
-          const value = await getDomain(counterContract, reqAddress)
+          const value = await getDomain(fastDomainContract, reqAddress)
           if(value === ""){
             toast(<NotificationSuccess text={<span> {reqAddress} is not registered &#127881;</span> } />);
           }else{
@@ -148,10 +146,10 @@ const Counter = ({counterContract, tokenContract}) => {
   const reAssignDomain = async () => {
     try {
         setLoading(true)
-        const value = await isDomainRegistered(counterContract , newDomainName)
+        const value = await isDomainRegistered(fastDomainContract , newDomainName)
         if(value === false){
           await approve(tokenContract, performActions);
-          await reassignDomain(counterContract,performActions, newDomainName)
+          await reassignDomain(fastDomainContract,performActions, newDomainName)
         }
     } catch (e) {
         console.log({e})
@@ -166,7 +164,7 @@ const Counter = ({counterContract, tokenContract}) => {
     const mintFastToken = async () => {
         try {
             setLoading(true)
-            await mintToken(counterContract, performActions)
+            await mintToken(fastDomainContract, performActions)
             console.log("Token Minted Successfully");
             toast(<NotificationSuccess text="Token Minted Succesfully...." />); 
 
@@ -515,4 +513,4 @@ const Counter = ({counterContract, tokenContract}) => {
     );
 };
 
-export default Counter;
+export default FastDomain;

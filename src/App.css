@@ -950,7 +950,7 @@ section {
 
 
 
-svg {
+#hero > svg {
   fill: red;
   height: auto;
   max-width: 15vmin;

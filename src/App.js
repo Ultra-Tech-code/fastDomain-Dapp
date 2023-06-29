@@ -4,14 +4,14 @@ import { useContractKit } from "@celo-tools/use-contractkit";
 import { Notification } from "./components/ui/Notifications";
 import Wallet from "./components/Wallet";
 import Cover from "./components/Cover";
-import Counter from "./components/Counter";
-import { useBalance, useFastDomainContr, useTokenContract } from "./hooks";
+import FastDomain from "./components/FastDomain";
+import { useBalance, useFastDomainContract, useTokenContract, } from "./hooks";
 import "./App.css";
 
 const App = function AppWrapper() {
   const { address, destroy, connect } = useContractKit();
   const { balance } = useBalance();
-  const counterContract = useFastDomainContract();
+  const fastDomainContract = useFastDomainContract();
   const tokenContract = useTokenContract();
 
   return (
@@ -32,7 +32,7 @@ const App = function AppWrapper() {
           </Nav>
           {/* display cover */}
           <main>
-            <Counter counterContract={counterContract} tokenContract={tokenContract}/>
+            <FastDomain fastDomainContract={fastDomainContract} tokenContract={tokenContract}/>
           </main>
         </Container>
       ) : (
