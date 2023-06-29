@@ -30,6 +30,12 @@ const NotificationError = ({ text }) => (
   </div>
 );
 
+const NotificationInfo = ({ text }) => (
+  <div>
+    <i className="bi bi-bell-fill text-info mx-2" />
+    <span className="text-secondary mx-1">{text} &#127881;</span>
+  </div>
+);
 const Props = {
   text: PropTypes.string,
 };
@@ -44,4 +50,7 @@ NotificationSuccess.defaultProps = DefaultProps;
 NotificationError.propTypes = Props;
 NotificationError.defaultProps = DefaultProps;
 
-export { Notification, NotificationSuccess, NotificationError };
+NotificationInfo.propTypes = Props;
+NotificationInfo.defaultProps = DefaultProps;
+
+export { Notification, NotificationSuccess, NotificationError, NotificationInfo};

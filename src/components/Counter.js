@@ -1,9 +1,11 @@
-import React, {useState, useEffect, useRef} from "react"
+import React, {useState, useEffect} from "react"
 import {Card, Button} from "react-bootstrap";
 import {useContractKit} from "@celo-tools/use-contractkit";
-import {getDomain,registerFastDomain, getConnectedAddressDomain, mintToken, getAllregisteredDomains, approve} from "../utils/counter";
+import {getDomain, getConnectedAddressDomain, mintToken, getAllregisteredDomains, approve, isDomainRegistered} from "../utils/counter";
 import Loader from "./ui/Loader";
-import {NotificationSuccess} from "./ui/Notifications";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import{ NotificationInfo, NotificationSuccess, NotificationError } from "./ui/Notifications"
 import { BiCalendarEdit, BiBookReader, BiLandscape} from "react-icons/bi";
 import "../App.css"
 let aboutImage = require("../images/img/about-img.jpg");
@@ -11,16 +13,13 @@ let whyUs1 = require("../images/img/why-us-1.jpg");
 let whyUs2 = require("../images/img/why-us-2.jpg");
 let whyUs3 = require("../images/img/why-us-3.jpg");
 
+
 const Counter = ({counterContract, tokenContract}) => {
     const [loading, setLoading] = useState(false);
-    const [count, setCount] = useState(0);
-    const [message, setMessage] = useState("");
+   // const [message, setMessage] = useState("");
     const [domainName, setdomainName] = useState("");
-    const [allDomain, setallDomain] = useState(""); //alldomain fetch
-    const [userDomain, setUserDomain] = useState(""); //userdomain
+    const [allDomain, setallDomain] = useState([]); //alldomain fetch
     const {performActions} = useContractKit();
-    const titleRef = useRef("");
-  
 
     useEffect(() => {
         try {
@@ -37,7 +36,7 @@ const Counter = ({counterContract, tokenContract}) => {
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        setMessage(`${domainName}`);
+        //setMessage(`${domainName}`);
         registerfastDomain()
     
       };
@@ -49,59 +48,49 @@ const Counter = ({counterContract, tokenContract}) => {
         // settotalID("");
       }
 
-    
+      const registerFastDomain = async (counterContract, performActions, domainName) => {
+        try {
+            await performActions(async (kit) => {
+                console.log("registerFastDomain", domainName)
+                const {defaultAccount} = kit;
+                await counterContract.methods.registerFastDomain(domainName).send({from: defaultAccount});
+
+                toast(<NotificationSuccess text={<p>{domainName} registered successfully &#127881;</p> } />); 
+            });
+        } catch (e) {
+          toast(<NotificationError text={<div> Insufficient Token <Button className="m-2" variant="dark" size="lg" onClick={mintFastToken}>
+          Mint Token
+          </Button></div> 
+ } />);
+            console.log({e});
+        }
+    };
+
     const registerfastDomain = async () => {
         try {
             setLoading(true); 
-             await approve(tokenContract, performActions);
-            // if(res){
-            //   console.log("done ")
-              
-            //   titleRef.current.style.display = 'block';
-            //   //document.querySelector('.sent-message').style.display = 'block';
-            // }
-            // await registerFastDomain(counterContract, performActions, domainName)
-            console.log("function run success")
-            return true;
+             await approve(tokenContract, performActions); 
+             await isDomainRegistered(domainName)
+            // await registerFastDomain(counterContract, performActions, domainName);
+            await registerFastDomain(counterContract, performActions, domainName)
         } catch (e) {
+            toast(<NotificationError text={ 
+            <Button className="m-2" variant="dark" size="lg" onClick={mintFastToken}>
+            Mint Token
+            </Button> } />);
             //document.querySelector('.error-message').style.visibility = 'visible';
             console.log("error", e)
         } finally {
             setLoading(false)
+            updateInput()
+            fetchAllDomain()
         }
     };
-
-    if(registerfastDomain){
-      titleRef.current.style.display = 'block';
-    }
-
-    // const registerfastDomain = async () => {
-    //   try {
-    //       setLoading(true);
-    //       await approve(tokenContract, performActions);
-    //       // await registerFastDomain(counterContract, performActions, domainName);
-    //       document.querySelector('.sent-message').style.display = 'block';
-    //   } catch (e) {
-    //     console.log("Error:", {e});
-    //     document.querySelector('.error-message').style.display = 'block';
-    //   } finally {
-    //     setLoading(false);
-    //   }
-    // };
 
     const fetchDomain = async () => {
         try {
             setLoading(true)
-            const value = await getConnectedAddressDomain(counterContract, performActions)
-            if (value === undefined){
-                console.log("You don't have a domain yet")
-                setUserDomain("You don't have a domain yet")
-                setCount("You don't have a domain yet")
-            } else{
-                console.log("value ",value)
-                setUserDomain(value)
-                setCount(value)
-            }
+          await getConnectedAddressDomain(counterContract, performActions)
         } catch (e) {
             console.log({e})
         } finally {
@@ -116,7 +105,6 @@ const Counter = ({counterContract, tokenContract}) => {
             const value = await getAllregisteredDomains(counterContract, performActions)
             console.log("value ",value)
             setallDomain(value)
-            setCount(value)
         } catch (e) {
             console.log({e})
         } finally {
@@ -130,9 +118,10 @@ const Counter = ({counterContract, tokenContract}) => {
             setLoading(true)
             await mintToken(counterContract, performActions)
             console.log("Token Minted Successfully");
-            NotificationSuccess("Token Minted Successfully")
+            toast(<NotificationSuccess text="Token Minted Succesfully...." />); 
 
         } catch (e) {
+          toast(<NotificationError text="OOps, unable to mint token." />);
             console.log({e})
         } finally {
             setLoading(false)
@@ -146,11 +135,10 @@ const Counter = ({counterContract, tokenContract}) => {
                 {!loading
                     ?
                     <div >
-                         <div>
+                        
 
         {/* ======= Hero Section ======= */}
         <section id="hero">
-          <p> {userDomain}</p>
           <div className="hero-container">
             <h1>Welcome to FastDomain</h1>
             <h2>Register your domain</h2>
@@ -172,7 +160,7 @@ const Counter = ({counterContract, tokenContract}) => {
                         Mint Token
                   </Button>
                  </div>
-                <div className="sendMessage" ref={titleRef}>Your notification request was sent. Thank you!</div>
+                <div className="sent-message">Your notification request was sent. Thank you!</div>
               </div>
               <div className="text-center"><button type="submit" >Submit!</button></div>
             </form>
@@ -189,9 +177,13 @@ const Counter = ({counterContract, tokenContract}) => {
                   <img src={aboutImage.default} className="img-fluid" alt="about" />
                 </div>
                 <div className="col-lg-6 pt-4 pt-lg-0">
-                  <h3>Most Recent Domain</h3>
+                <div className="section-title">
+                    <h2>Most Recent Domain</h2>
+                </div>
                   <p className="fst-italic display-6" >
-                    {allDomain}
+                    {allDomain.map((element, index) => (
+                      <p key={index}>{element}</p>
+                    ))}
 
                   </p>
                 </div>
@@ -199,6 +191,7 @@ const Counter = ({counterContract, tokenContract}) => {
             </div>
           </section>{/* End About Section */}
           {/* ======= Why Us Section ======= */}
+
           <section id="why-us" className="why-us section-bg">
             <div className="container">
               <div className="row">
@@ -276,55 +269,27 @@ const Counter = ({counterContract, tokenContract}) => {
                       <div className="error-message" />
                       <div className="sent-message">Your message has been sent. Thank you!</div>
                     </div>
-                    <div className="text-center"><button type="submit">Send Message</button></div>
+                    <div className="text-center"><button type="submit">Submit</button></div>
                   </form>
                 </div>
               </div>
             </div>
           </section>{/* End Contact Us Section */}
         </main>{/* End #main */}
+
         {/* ======= Footer ======= */}
         <footer id="footer">
           <div className="container">
             <div className="copyright">
               © Copyright <strong><span>FastDomain</span></strong>. All Rights Reserved
             </div>
-            <div className="credits">
-              Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
-            </div>
+            {/* <div className="credits">
+              Designed by <a href="https://github.com/Ultra-Tech-code">Ultra-tech</a>
+            </div> */}
           </div>
         </footer>{/* End #footer */}
 
       </div>
-                        <Card.Title>Count: {count}</Card.Title>
-                        {/* <Button className="m-2" variant="dark" size="lg" onClick={increment}>
-                            Increase Count
-                        </Button> */}
-
-                        <Button className="m-2" variant="dark" size="lg" onClick={fetchDomain}>
-                        Fetch Domain
-                        </Button>
-
-                        <Button className="m-2" variant="dark" size="lg" onClick={mintFastToken}>
-                        Mint Token
-                        </Button>
-
-
-                        <Button className="m-2" variant="dark" size="lg" onClick={fetchAllDomain}>
-                        Fetch all Domain
-                        </Button>
-
-
-                        {/* <Button
-                            className="m-2"
-                            variant="outline-dark"
-                            disabled={count < 1}
-                            size="lg"
-                            onClick={decrement}
-                        >
-                            Decrease Count
-                        </Button> */}
-                    </div>
                     :
                     <Loader/>
                 }
