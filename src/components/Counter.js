@@ -21,7 +21,7 @@ const Counter = ({counterContract, tokenContract}) => {
     const [userAddress, setUseraddress] = useState("");
     const [newDomainName, setNewdomain] = useState("")
     const [allDomain, setallDomain] = useState([]); //alldomain fetch
-    const {performActions} = useContractKit();
+    const {performActions, address} = useContractKit();
 
     useEffect(() => {
         try {
@@ -55,6 +55,7 @@ const Counter = ({counterContract, tokenContract}) => {
     
       const updateInput =() => {
         setdomainName("");
+
       }
 
       const registerFastDomain = async (counterContract, performActions, _domainName) => {
@@ -76,18 +77,18 @@ const Counter = ({counterContract, tokenContract}) => {
     const registerfastDomain = async () => {
         try {
             setLoading(true); 
-           await isDomainRegistered(domainName)
-            // if(value == true){
+          const value = await isDomainRegistered(counterContract , domainName)
+          const value1 = await getdomain()
+             if(value === false && value1 === ""){
               await approve(tokenContract, performActions);
               await registerFastDomain(counterContract, performActions, domainName) 
-            // }
+            }
 
         } catch (e) {
             toast(<NotificationError text={ 
             <Button className="m-2" variant="dark" size="lg" onClick={mintFastToken}>
             Mint Token
             </Button> } />);
-            //document.querySelector('.error-message').style.visibility = 'visible';
             console.log("error", e)
         } finally {
             setLoading(false)
@@ -120,25 +121,34 @@ const Counter = ({counterContract, tokenContract}) => {
     };
 
     const getdomain = async () => {
+      let reqAddress;
+      if(userAddress === ""){
+        reqAddress = address;
+      }else {
+        reqAddress = userAddress
+      }
+      console.log("req addree", reqAddress)
       try {
           setLoading(true)
-          const value = await getDomain(counterContract, userAddress)
+          const value = await getDomain(counterContract, reqAddress)
           if(value === ""){
-            toast(<NotificationSuccess text={<span> {userAddress} is not registered &#127881;</span> } />);
+            toast(<NotificationSuccess text={<span> {reqAddress} is not registered &#127881;</span> } />);
           }else{
-            toast(<NotificationSuccess text={<span> {userAddress} belongs to {value} &#127881;</span> } />);
+            toast(<NotificationSuccess text={<span> {reqAddress} belongs to {value} &#127881;</span> } />);
           } 
+          return value;
       } catch (e) {
           console.log({e})
       } finally {
           setLoading(false)
+          setUseraddress("")
       }
   };
 
   const reAssignDomain = async () => {
     try {
         setLoading(true)
-        //await approve(tokenContract, performActions);
+        await approve(tokenContract, performActions);
        await reassignDomain(counterContract,performActions, newDomainName)
     } catch (e) {
         console.log({e})
@@ -171,7 +181,6 @@ const Counter = ({counterContract, tokenContract}) => {
                     ?
                     <div >
                         
-
         {/* ======= Hero Section ======= */}
         <section id="hero">
           <div className="hero-container">
