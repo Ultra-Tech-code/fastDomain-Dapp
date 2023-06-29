@@ -17,7 +17,8 @@ let whyUs3 = require("../images/img/why-us-3.jpg");
 const Counter = ({counterContract, tokenContract}) => {
     const [loading, setLoading] = useState(false);
    // const [message, setMessage] = useState("");
-    const [domainName, setdomainName] = useState("");
+    const [domainName, setdomainName] = useState("")
+    const [userAddress, setUseraddress] = useState("");
     const [allDomain, setallDomain] = useState([]); //alldomain fetch
     const {performActions} = useContractKit();
 
@@ -38,7 +39,11 @@ const Counter = ({counterContract, tokenContract}) => {
         event.preventDefault();
         //setMessage(`${domainName}`);
         registerfastDomain()
-    
+      };
+
+      const getDomainSubmit = (event) => {
+        event.preventDefault();
+        getdomain(counterContract, userAddress)
       };
     
       const updateInput =() => {
@@ -104,7 +109,7 @@ const Counter = ({counterContract, tokenContract}) => {
         try {
 
             setLoading(true)
-            const value = await getAllregisteredDomains(counterContract, performActions)
+            const value = await getAllregisteredDomains(counterContract)
             console.log("value ",value)
             setallDomain(value)
         } catch (e) {
@@ -113,6 +118,19 @@ const Counter = ({counterContract, tokenContract}) => {
             setLoading(false)
         }
     };
+
+    const getdomain = async () => {
+      try {
+
+          setLoading(true)
+          const value = await getDomain(counterContract, domainName)
+          console.log("value ",value)
+      } catch (e) {
+          console.log({e})
+      } finally {
+          setLoading(false)
+      }
+  };
 
 
     const mintFastToken = async () => {
@@ -151,18 +169,6 @@ const Counter = ({counterContract, tokenContract}) => {
                   <input type="text" id="domainName" name="name" className="form-control" value={domainName} placeholder="Domain Name" required onChange={(event) => setdomainName(event.target.value)}/>
                 </div>
                 <div></div>
-                {/* <div className="col-md-6 form-group pl-md-1 text-center">
-                 <button type="submit">Notify me!</button>
-                </div> */}
-              </div>
-              <div className="my-3">
-                <div className="loading">Loading</div>
-                <div className="error-message"> 
-                <Button className="m-2" variant="dark" size="lg" onClick={mintFastToken}>
-                        Mint Token
-                  </Button>
-                 </div>
-                <div className="sent-message">Your notification request was sent. Thank you!</div>
               </div>
               <div className="text-center"><button type="submit" >Submit!</button></div>
             </form>
@@ -296,6 +302,46 @@ const Counter = ({counterContract, tokenContract}) => {
               </div>
             </div>
           </section>{/* END reassign Domain Section */}
+
+           {/* ======= Get Domain Section ======= */}
+          <section id="contact" className="contact section-bg">
+            <div className="container">
+              <div className="section-title">
+                <h2>Get Domain name</h2>
+              </div>
+              <div className="row justify-content-center">
+                <div className="col-lg-3 col-md-5 mb-2 mb-md-0">
+                  <div className="info txt">
+                  <div className="card-icon">
+                      <i><BiSort/> </i>
+                    </div>
+                      <p className="txt">Get Domain name ass0ciated with an address</p>
+                    </div>
+                </div>
+                <div className="col-lg-5 col-md-7">
+                <form onSubmit={getDomainSubmit} className="email-form">
+              <div className="row no-gutters">
+                <div className="col-md-6 form-group pr-md-1">
+                  <input type="text" id="userAddress" name="name" className="form-control" value={userAddress} placeholder="User Address" required onChange={(event) => setUseraddress(event.target.value)}/>
+                </div>
+                <div></div>
+              </div>
+              <div className="text-center"><button type="submit" >Submit!</button></div>
+            </form>
+                </div>
+              </div>
+            </div>
+          </section>{/* END Get Domain Section */}
+
+          {/* <form onSubmit={handleSubmit} className="email-form">
+              <div className="row no-gutters">
+                <div className="col-md-6 form-group pr-md-1">
+                  <input type="text" id="domainName" name="name" className="form-control" value={domainName} placeholder="Domain Name" required onChange={(event) => setdomainName(event.target.value)}/>
+                </div>
+                <div></div>
+              </div>
+              <div className="text-center"><button type="submit" >Submit!</button></div>
+            </form> */}
 
 
 

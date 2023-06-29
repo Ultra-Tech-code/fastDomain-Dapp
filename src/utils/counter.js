@@ -57,15 +57,6 @@ export const reassignDomain = async (counterContract, performActions, newDomainN
     }
 };
 
-export const getDomain = async (counterContract) => {
-    try {
-
-        const value =  await counterContract.methods.getDomain().call();
-        return value
-    } catch (e) {
-        console.log({e});
-    }
-};
 
 export const getConnectedAddressDomain = async (counterContract, performActions) => {
     try {
@@ -105,6 +96,16 @@ export const getAllregisteredDomains = async (counterContract) => {
     try {
 
         const value =  await counterContract.methods.getAllregisteredDomains().call();
+        return value
+    } catch (e) {
+        console.log({e});
+    }
+};
+
+export const getDomain = async (counterContract, Useraddresss) => {
+    console.log("user ", Useraddresss)
+    try {
+        const value =  await counterContract.methods.getDomain(Useraddresss).call();
         return value
     } catch (e) {
         console.log({e});
