@@ -6,7 +6,7 @@ import Loader from "./ui/Loader";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import{ NotificationInfo, NotificationSuccess, NotificationError } from "./ui/Notifications"
-import { BiCalendarEdit, BiBookReader, BiLandscape} from "react-icons/bi";
+import { BiCalendarEdit, BiBookReader, BiLandscape, BiDollarCircle, BiSort} from "react-icons/bi";
 import "../App.css"
 let aboutImage = require("../images/img/about-img.jpg");
 let whyUs1 = require("../images/img/why-us-1.jpg"); 
@@ -69,10 +69,12 @@ const Counter = ({counterContract, tokenContract}) => {
     const registerfastDomain = async () => {
         try {
             setLoading(true); 
-             await approve(tokenContract, performActions); 
-             await isDomainRegistered(domainName)
-            // await registerFastDomain(counterContract, performActions, domainName);
-            await registerFastDomain(counterContract, performActions, domainName)
+           await isDomainRegistered(domainName)
+            // if(value == true){
+              await approve(tokenContract, performActions);
+              await registerFastDomain(counterContract, performActions, domainName) 
+            // }
+
         } catch (e) {
             toast(<NotificationError text={ 
             <Button className="m-2" variant="dark" size="lg" onClick={mintFastToken}>
@@ -121,7 +123,7 @@ const Counter = ({counterContract, tokenContract}) => {
             toast(<NotificationSuccess text="Token Minted Succesfully...." />); 
 
         } catch (e) {
-          toast(<NotificationError text="OOps, unable to mint token." />);
+          toast(<NotificationError text="OOps, Already Minted." />);
             console.log({e})
         } finally {
             setLoading(false)
@@ -234,47 +236,69 @@ const Counter = ({counterContract, tokenContract}) => {
               </div>
             </div>
           </section>{/* End Why Us Section */}
-          {/* ======= Frequenty Asked Questions Section ======= */}
-          {/* ======= Contact Us Section ======= */}
+      
+          {/* ======= Mint Token Section ======= */}
           <section id="contact" className="contact section-bg">
             <div className="container">
               <div className="section-title">
                 <h2>Mint Token</h2>
               </div>
               <div className="row justify-content-center">
-                <div className="col-lg-3 col-md-5 mb-5 mb-md-0">
-                  <div className="info">
-                    <div className="address">
-                      <i className="bx bx-map" />
-                      <p>Mint Fast Token for Free and register name </p>
+                <div className="col-lg-3 col-md-5 mb-2 mb-md-0">
+                  <div className="info txt">
+                      <div className="card-icon">
+                      <i><BiDollarCircle/> </i>
                     </div>
-                    <div className="email">
-                      <i className="bx bx-envelope" />
-                      <p>Do you want to reassign your domain name?</p>
+                      <p className="txt">Mint Fast Token for Free and register name </p>
                     </div>
-                  </div>
                 </div>
                 <div className="col-lg-5 col-md-7">
                   <form className="email-form">
                     <div className="form-group">
-                    <Button className="m-2" variant="dark" size="lg" onClick={mintFastToken}>
+                    <div className="text-center mt-2">
+                    <button type="submit"  onClick={mintFastToken}>
                         Mint Token
-                  </Button>
+                  </button>
+                  </div>
                     </div>
-                    <div className="form-group mt-3">
-                      <input type="text" className="form-control" name="subject" id="subject" placeholder="New Domain name" required />
-                    </div>
-                    <div className="my-3">
-                      <div className="loading">Loading</div>
-                      <div className="error-message" />
-                      <div className="sent-message">Your message has been sent. Thank you!</div>
-                    </div>
-                    <div className="text-center"><button type="submit">Submit</button></div>
                   </form>
                 </div>
               </div>
             </div>
-          </section>{/* End Contact Us Section */}
+          </section>{/* End mint Token Section */}
+
+
+                    {/* ======= Reassign Domain Section ======= */}
+          <section id="contact" className="contact section-bg">
+            <div className="container">
+              <div className="section-title">
+                <h2>Reassign Domain</h2>
+              </div>
+              <div className="row justify-content-center">
+                <div className="col-lg-3 col-md-5 mb-2 mb-md-0">
+                  <div className="info txt">
+                  <div className="card-icon">
+                      <i><BiSort/> </i>
+                    </div>
+                      <p className="txt">Do you want to reassign your domain name?</p>
+                    </div>
+                </div>
+                <div className="col-lg-5 col-md-7">
+                  <form className="email-form">
+                    <div className="form-group mt-1">
+                      <input type="text" className="form-control" name="subject" id="subject" placeholder="New Domain name" required />
+                    </div>
+                    <div className="text-center mt-2">
+                      <button type="submit">Submit</button>
+                      </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </section>{/* END reassign Domain Section */}
+
+
+
         </main>{/* End #main */}
 
         {/* ======= Footer ======= */}

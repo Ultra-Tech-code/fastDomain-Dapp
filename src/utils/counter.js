@@ -89,12 +89,13 @@ export const getConnectedAddressDomain = async (counterContract, performActions)
 
 export const isDomainRegistered = async (counterContract, domainName) => {
     try {
-
+        console.log("dnjmdf", domainName)
         const value =  await counterContract.methods.isDomainRegistered(domainName).call();
         if(value === true){
             toast(<NotificationSuccess text="Domain name already Taken"/>);
             return;
         }
+        return value;
     } catch (e) {
         console.log({e});
     }

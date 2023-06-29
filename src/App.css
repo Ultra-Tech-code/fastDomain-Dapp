@@ -607,7 +607,7 @@ h6,
 # Sections General
 --------------------------------------------------------------*/
 section {
-  padding: 80px 0;
+  padding: 30px 0;
 }
 
 .section-bg {
@@ -813,7 +813,7 @@ section {
 
 .contact .info p {
   padding: 0 0 10px 50px;
-  margin-bottom: 20px;
+  margin-bottom: 5px;
   line-height: 22px;
   font-size: 14px;
 }
@@ -851,7 +851,7 @@ section {
 }
 
 .contact .email-form .error-message br+br {
-  margin-top: 25px;
+  margin-top: 5px;
 }
 
 .contact .email-form .sent-message {
@@ -941,4 +941,9 @@ section {
   text-align: center;
   font-size: 13px;
   color: #fff;
+}
+
+.txt {
+  font-size: 28px;
+  line-height: 36px;
 }
