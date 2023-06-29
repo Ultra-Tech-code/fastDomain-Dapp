@@ -50,7 +50,7 @@ export const reassignDomain = async (counterContract, performActions, newDomainN
     try {
         await performActions(async (kit) => {
             const {defaultAccount} = kit;
-            await counterContract.methods.reassignDomain(newDomainName).send({from: defaultAccount});
+            await counterContract.methods.reassignDomain(newDomainName, defaultAccount).send({from: defaultAccount});
         });
     } catch (e) {
         console.log({e});
@@ -64,7 +64,8 @@ export const getConnectedAddressDomain = async (counterContract, performActions)
         await performActions(async (kit) => {
             const {defaultAccount} = kit;
             const value =  await counterContract.methods.getDomain(defaultAccount).call();
-            if (value === undefined){
+            console.log("value of user", value)
+            if (value === undefined || value === ""){
                 toast(<NotificationInfo text={"You don't have a domain yet" }/>); 
             } else{
               toast(<NotificationInfo text={ <span> Welcome {value}</span> } />); 

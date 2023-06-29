@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from "react"
 import {Card, Button} from "react-bootstrap";
 import {useContractKit} from "@celo-tools/use-contractkit";
-import {getDomain, getConnectedAddressDomain, mintToken, getAllregisteredDomains, approve, isDomainRegistered} from "../utils/counter";
+import {getDomain, getConnectedAddressDomain, mintToken, getAllregisteredDomains, approve, isDomainRegistered, reassignDomain} from "../utils/counter";
 import Loader from "./ui/Loader";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -19,6 +19,7 @@ const Counter = ({counterContract, tokenContract}) => {
    // const [message, setMessage] = useState("");
     const [domainName, setdomainName] = useState("")
     const [userAddress, setUseraddress] = useState("");
+    const [newDomainName, setNewdomain] = useState("")
     const [allDomain, setallDomain] = useState([]); //alldomain fetch
     const {performActions} = useContractKit();
 
@@ -40,10 +41,17 @@ const Counter = ({counterContract, tokenContract}) => {
         registerfastDomain()
       };
 
-      const getDomainSubmit = (event) => {
-        event.preventDefault();
-        getdomain()
-      };
+    const getDomainSubmit = (event) => {
+      event.preventDefault();
+      getdomain()
+    };
+
+    const reAssignSubmit = (event) => {
+      event.preventDefault();
+      reAssignDomain()
+    };
+
+    
     
       const updateInput =() => {
         setdomainName("");
@@ -126,6 +134,18 @@ const Counter = ({counterContract, tokenContract}) => {
           setLoading(false)
       }
   };
+
+  const reAssignDomain = async () => {
+    try {
+        setLoading(true)
+        //await approve(tokenContract, performActions);
+       await reassignDomain(counterContract,performActions, newDomainName)
+    } catch (e) {
+        console.log({e})
+    } finally {
+        setLoading(false)
+    }
+};
 
 
     const mintFastToken = async () => {
@@ -285,14 +305,18 @@ const Counter = ({counterContract, tokenContract}) => {
                     </div>
                 </div>
                 <div className="col-lg-5 col-md-7">
-                  <form className="email-form">
-                    <div className="form-group mt-1">
-                      <input type="text" className="form-control" name="subject" id="subject" placeholder="New Domain name" required />
-                    </div>
-                    <div className="text-center mt-2">
-                      <button type="submit">Submit</button>
-                      </div>
-                  </form>
+
+                <form onSubmit={reAssignSubmit} className="email-form">
+              <div className="row no-gutters">
+                <div className="form-group mt-1">
+                  <input type="text" id="newDomainName" name="name" className="form-control" value={newDomainName} placeholder="New Domain Name" required onChange={(event) => setNewdomain(event.target.value)}/>
+                </div>
+                <div></div>
+              </div>
+              <div className="text-center mt-2">
+                <button type="submit" >Submit!</button>
+                </div>
+            </form>
                 </div>
               </div>
             </div>
@@ -314,29 +338,23 @@ const Counter = ({counterContract, tokenContract}) => {
                     </div>
                 </div>
                 <div className="col-lg-5 col-md-7">
+
                 <form onSubmit={getDomainSubmit} className="email-form">
               <div className="row no-gutters">
-                <div className="col-md-6 form-group pr-md-1">
+                <div className="form-group mt-1">
                   <input type="text" id="userAddress" name="name" className="form-control" value={userAddress} placeholder="User Address" required onChange={(event) => setUseraddress(event.target.value)}/>
                 </div>
                 <div></div>
               </div>
-              <div className="text-center"><button type="submit" >Submit!</button></div>
+              <div className="text-center mt-2">
+                <button type="submit" >Submit!</button>
+                </div>
             </form>
                 </div>
               </div>
             </div>
           </section>{/* END Get Domain Section */}
 
-          {/* <form onSubmit={handleSubmit} className="email-form">
-              <div className="row no-gutters">
-                <div className="col-md-6 form-group pr-md-1">
-                  <input type="text" id="domainName" name="name" className="form-control" value={domainName} placeholder="Domain Name" required onChange={(event) => setdomainName(event.target.value)}/>
-                </div>
-                <div></div>
-              </div>
-              <div className="text-center"><button type="submit" >Submit!</button></div>
-            </form> */}
 
 
 
