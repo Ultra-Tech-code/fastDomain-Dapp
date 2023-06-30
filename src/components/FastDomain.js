@@ -125,7 +125,6 @@ const FastDomain = ({fastDomainContract, tokenContract}) => {
       }else {
         reqAddress = userAddress
       }
-      console.log("req addree", reqAddress)
       try {
           setLoading(true)
           const value = await getDomain(fastDomainContract, reqAddress)
@@ -165,7 +164,6 @@ const FastDomain = ({fastDomainContract, tokenContract}) => {
         try {
             setLoading(true)
             await mintToken(fastDomainContract, performActions)
-            console.log("Token Minted Successfully");
             toast(<NotificationSuccess text="Token Minted Succesfully...." />); 
 
         } catch (e) {

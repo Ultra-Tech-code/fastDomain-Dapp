@@ -66,12 +66,10 @@ export const getConnectedAddressDomain = async (fastDomainContract, performActio
         await performActions(async (kit) => {
             const {defaultAccount} = kit;
             const value =  await fastDomainContract.methods.getDomain(defaultAccount).call();
-            console.log("value of user", value)
             if (value === undefined || value === ""){
                 toast(<NotificationInfo text={"You don't have a domain yet" }/>); 
             } else{
               toast(<NotificationInfo text={ <span> Welcome {value}</span> } />); 
-                console.log("value ",value)
             }
         });
 
