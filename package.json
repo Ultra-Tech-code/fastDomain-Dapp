@@ -1,5 +1,6 @@
-{
-  "name": "celo-react-boilerplate",
+{ 
+  "homepage": "https://${Ultra-tech-code}.github.io/${fastDomain-Dapp}",
+  "name": "fast-domain-dapp",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -16,6 +17,7 @@
     "bootstrap": "^5.3.0",
     "bootstrap-icons": "^1.7.1",
     "dotenv": "^10.0.0",
+    "gh-pages": "^5.0.0",
     "prop-types": "^15.7.2",
     "react": "^17.0.2",
     "react-bootstrap": "^2.0.3",
@@ -32,7 +34,9 @@
     "eject": "react-scripts eject",
     "compile": "npx hardhat compile",
     "deploy": "npx hardhat run --network alfajores scripts/deploy.js",
-    "test-contract": "npx hardhat test"
+    "test-contract": "npx hardhat test",
+    "predeploy": "npm run build",
+    "deploy-page": "gh-pages -d build"
   },
   "eslintConfig": {
     "extends": [
